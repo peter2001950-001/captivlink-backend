@@ -1,24 +1,22 @@
-﻿.body-container {
-  margin-top: 60px;
-  padding-bottom: 40px; }
+﻿* {
+    box-sizing: border-box;
+}
 
-.welcome-page li {
-  list-style: none;
-  padding: 4px; }
+.surface-ground {
+    background-color: #eff3f8 !important;
+}
 
-.logged-out-page iframe {
-  display: none;
-  width: 0;
-  height: 0; }
+.surface-card {
+    background-color: #ffffff !important;
+}
 
-.grants-page .card {
-  margin-top: 20px;
-  border-bottom: 1px solid lightgray; }
-  .grants-page .card .card-title {
-    font-size: 120%;
-    font-weight: bold; }
-    .grants-page .card .card-title img {
-      width: 100px;
-      height: 100px; }
-  .grants-page .card label {
-    font-weight: bold; }
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.min-w-screen {
+    min-height: 100vw;
+}
+.w-30rem {
+    width: 30rem !important;
+}

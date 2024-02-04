@@ -50,19 +50,19 @@ namespace Captivlink.Api.Utility
 
 
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            if (!userManager.Users.Any(x => x.UserName == "test"))
+            if (!userManager.Users.Any(x => x.UserName == "creator"))
             {
                 var user = new ApplicationUser()
                 {
-                    Email = "test@admin.com",
+                    Email = "test1@admin.com",
                     FirstName = "Admin",
                     LastName = "Admin",
                     EmailConfirmed = true,
-                    UserName = "test"
+                    UserName = "creator"
                 };
                 var response = await userManager.CreateAsync(user, "Sample123!");
                    
-                await userManager.AddToRoleAsync(user, "BUSINESS");
+                await userManager.AddToRoleAsync(user, "CONTENTCREATOR");
             }
         }
 

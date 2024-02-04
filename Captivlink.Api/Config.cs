@@ -22,7 +22,7 @@ namespace Captivlink.Api
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("captivlink-backend")
+                new ApiScope("captivlink-backend"),
             };
 
         public static IEnumerable<ApiResource> GetApis()
@@ -89,6 +89,30 @@ namespace Captivlink.Api
 
                     PostLogoutRedirectUris = backendBaseUrls.ToList(),
                     AllowedCorsOrigins = backendBaseUrls.ToList(),
+
+                    AllowedScopes = {"openid", "profile", "email", "captivlink-backend"}
+                },
+                new Client
+                {
+                    ClientId = "captivlink-ui",
+                    ClientName = "Captivlink UI",
+                    ClientUri = $"{uiBaseUrls.First()}",
+                    RequireClientSecret = false,
+
+                    AllowedGrantTypes = new[] {GrantType.AuthorizationCode},
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
+                    AccessTokenLifetime = (int) Math.Floor(TimeSpan.FromMinutes(5).TotalSeconds),
+                    SlidingRefreshTokenLifetime = (int) Math.Floor(TimeSpan.FromMinutes(15).TotalSeconds),
+                    AbsoluteRefreshTokenLifetime = (int) Math.Floor(TimeSpan.FromMinutes(30).TotalSeconds),
+                    RedirectUris = uiBaseUrls.SelectMany(x => new[]
+                    {
+                        $"{x}/signin-callback",
+                        $"{x}/silent-renew.html",
+                    }).ToList(),
+
+                    PostLogoutRedirectUris = new List<string>(){ $"{uiBaseUrls.First()}/signout-callback"},
+                    AllowedCorsOrigins = uiBaseUrls.ToList(),
 
                     AllowedScopes = {"openid", "profile", "email", "captivlink-backend"}
                 },

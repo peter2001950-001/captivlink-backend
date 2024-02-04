@@ -1,0 +1,46 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+a {
+    color: #6366F1 !important;
+    text-decoration: none !important;
+}
+
+.surface-ground {
+    background-color: #f9fafb !important;
+}
+
+.surface-card {
+    background-color: #ffffff !important;
+    padding: 5rem !important;
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.min-w-screen {
+    min-height: 100vw;
+}
+
+.mt-10{
+    margin-top: 5rem;
+}
+.form-control {
+    width: 30rem !important;
+}
+.logo {
+    width: 9rem;
+    margin-bottom: 1rem;
+}
+
+@media(max-width: 650px){
+    .form-control {
+        width: 15rem !important;
+    }
+
+    .surface-card {
+        padding: 5rem 2rem 5rem 2rem !important;
+    }
+}

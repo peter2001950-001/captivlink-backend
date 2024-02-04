@@ -95,7 +95,7 @@ namespace Captivlink.Api
                 options.Events.RaiseSuccessEvents = true;
 
                 options.Authentication.CookieSlidingExpiration = true;
-                options.Authentication.CookieLifetime = TimeSpan.FromMinutes(60);
+                options.Authentication.CookieLifetime = TimeSpan.FromMinutes(1);
             })
                 .AddDeveloperSigningCredential()
                 .AddConfigurationStore<AzureConfigurationDbContext>(options =>
@@ -244,6 +244,11 @@ namespace Captivlink.Api
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
+            app.Use(async (context, next) => {
+                context.Response.Headers.Add("Content-Security-Policy", "default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src http: https: data:; frame-src 'self'");
+
+                await next();
+            });
 
             app.UseStaticFiles();
 
