@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json.Serialization;
 using AutoMapper;
+using Captivlink.Application;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -85,7 +86,8 @@ namespace Captivlink.Backend
             }
 
             services.AddControllers();
-
+            services.AddApplicationServices();
+            services.AddAutoMapper(typeof(Startup).Assembly);
             IdentityModelEventSource.ShowPII = true;
             //
             // services.AddSwaggerConfig<PublicApiSwaggerOptions, AuthorizeCheckOperationFilter>(

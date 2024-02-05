@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 using Captivlink.Infrastructure.Data;
 using Captivlink.Infrastructure.Domain;
 using Captivlink.Infrastructure.Utility;
@@ -12,11 +8,11 @@ namespace Captivlink.Infrastructure.Repositories
 {
     public abstract class BaseRepository<TEntity> where TEntity : Entity
     {
-        protected readonly ApplicationDbContext dbContext;
+        protected readonly ApplicationDbContext DbContext;
 
         protected BaseRepository(ApplicationDbContext dbContext)
         {
-            this.dbContext = dbContext;
+            this.DbContext = dbContext;
         }
 
         protected abstract IQueryable<TEntity> Query { get; }
@@ -24,6 +20,16 @@ namespace Captivlink.Infrastructure.Repositories
         public async Task<IEnumerable<TEntity>> FindAllAsync(PaginationOptions request)
         {
             return await Query.Sorted(request).Paged(request).ToListAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> FindWhereAsync(Expression<Func<TEntity, bool>> whereExpression, PaginationOptions? request)
+        {
+            return await Query.Where(whereExpression).Sorted(request).Paged(request).ToListAsync();
+        }
+
+        public async Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> whereExpression)
+        {
+            return await Query.Where(whereExpression).FirstOrDefaultAsync();
         }
 
         public async Task<int> CountAllAsync()
@@ -42,19 +48,16 @@ namespace Captivlink.Infrastructure.Repositories
             {
                 entity = await BeforeAddAsync(entity);
 
-                await dbContext.AddAsync(entity);
-                await dbContext.SaveChangesAsync();
+                await DbContext.AddAsync(entity);
+                await DbContext.SaveChangesAsync();
                 await AfterAddAsync(entity);
             }
 
             return entity;
         }
 
-        public virtual async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
+        public virtual async Task<TEntity?> UpdateAsync(Guid id, TEntity entity)
         {
-            if (entity == null)
-                return null;
-
             entity.Id = id;
             if (await CanUpdateAsync(entity))
             {
@@ -64,8 +67,8 @@ namespace Captivlink.Infrastructure.Repositories
 
                 entity = await BeforeUpdateAsync(id, entity, localEntity);
 
-                dbContext.Update(entity);
-                await dbContext.SaveChangesAsync();
+                DbContext.Update(entity);
+                await DbContext.SaveChangesAsync();
                 await AfterUpdateAsync(entity);
             }
 
@@ -80,8 +83,8 @@ namespace Captivlink.Infrastructure.Repositories
 
             if (await CanDeleteAsync(entity))
             {
-                dbContext.Remove(entity);
-                await dbContext.SaveChangesAsync();
+                DbContext.Remove(entity);
+                await DbContext.SaveChangesAsync();
             }
         }
 
@@ -120,16 +123,16 @@ namespace Captivlink.Infrastructure.Repositories
             return Task.FromResult(entity);
         }
 
-        public virtual void DetachLocal<T>(Entity entity, EntityState newState) where T : Entity
+        public virtual void DetachLocal<T>(Entity? entity, EntityState newState) where T : Entity
         {
             if (entity == null) return; ;
-            var local = dbContext.Set<T>().Local.FirstOrDefault(x => x.Id == entity.Id);
+            var local = DbContext.Set<T>().Local.FirstOrDefault(x => x.Id == entity.Id);
             if (local != null)
             {
-                var s = dbContext.Entry(local).State;
-                dbContext.Entry(local).State = EntityState.Detached;
+                var s = DbContext.Entry(local).State;
+                DbContext.Entry(local).State = EntityState.Detached;
             }
-            dbContext.Entry(entity).State = newState;
+            DbContext.Entry(entity).State = newState;
         }
 
     }

@@ -9,7 +9,7 @@ namespace Captivlink.Infrastructure.Utility
 {
     public static class PaginationExtensions
     {
-        public static IEnumerable<T> Paged<T>(this IEnumerable<T> input, PaginationOptions request)
+        public static IEnumerable<T> Paged<T>(this IEnumerable<T> input, PaginationOptions? request)
         {
             if (request == null)
                 return input;
@@ -23,7 +23,7 @@ namespace Captivlink.Infrastructure.Utility
             return output;
         }
 
-        public static IQueryable<T> Paged<T>(this IQueryable<T> input, PaginationOptions request)
+        public static IQueryable<T> Paged<T>(this IQueryable<T> input, PaginationOptions? request)
         {
             if (request == null)
                 return input;
@@ -37,7 +37,7 @@ namespace Captivlink.Infrastructure.Utility
             return output;
         }
 
-        private static string ExtractSortFields(PaginationOptions request)
+        private static string ExtractSortFields(PaginationOptions? request)
         {
             if (request?.SortFields == null)
                 return string.Empty;
@@ -58,7 +58,7 @@ namespace Captivlink.Infrastructure.Utility
             }));
         }
 
-        public static IEnumerable<T> Sorted<T>(this IEnumerable<T> input, PaginationOptions request)
+        public static IEnumerable<T> Sorted<T>(this IEnumerable<T> input, PaginationOptions? request)
         {
             if (request == null)
                 return input;
@@ -74,7 +74,7 @@ namespace Captivlink.Infrastructure.Utility
             }
         }
 
-        public static IQueryable<T> Sorted<T>(this IQueryable<T> input, PaginationOptions request)
+        public static IQueryable<T> Sorted<T>(this IQueryable<T> input, PaginationOptions? request)
         {
             if (request == null)
                 return input;

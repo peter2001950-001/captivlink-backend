@@ -29,9 +29,17 @@ using Captivlink.Infrastructure;
 using Captivlink.Infrastructure.Repositories.Contracts;
 using IdentityServer4.Extensions;
 using Captivlink.Api.Utility;
+using Captivlink.Api.Utility.Swagger;
+using Captivlink.Application;
+using System.Collections.Generic;
 
 namespace Captivlink.Api
 {
+    public class BackendApiSwaggerOptions : SwaggerDefaultOptions
+    {
+        protected override string ApiTitle => "Captivlink Backend API";
+    }
+
     public class Startup
     {
         public IWebHostEnvironment Environment { get; }
@@ -58,8 +66,9 @@ namespace Captivlink.Api
             // not recommended for production - you need to store your key material somewhere secure
             Seeder.RunDbMigrations(services).GetAwaiter().GetResult();
             RegisterIdentityServer(services);
-            services.AddRepositories();
+            services.AddApplicationServices();
 
+           
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
@@ -82,9 +91,16 @@ namespace Captivlink.Api
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             services.AddAuthentication()
                 .AddLocalApi(options => { options.ExpectedScope = Program.Application.Authority.ApiName; });
-                
 
-            services.AddAuthorization();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(IdentityServerConstants.LocalApi.PolicyName, policy =>
+                {
+                    policy.AddAuthenticationSchemes(IdentityServerConstants.LocalApi.AuthenticationScheme);
+                    policy.RequireAuthenticatedUser();
+                });
+            });
             services.AddTransient<IProfileService, IdentityWithAdditionalClaimsProfileService>();
 
             services.AddIdentityServer(options =>
@@ -117,7 +133,6 @@ namespace Captivlink.Api
                 .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
 
             services.AddTransient<IRedirectUriValidator, LogoutRedirectUriValidator>();
-
            
             services.Configure<IdentityOptions>(options =>
             {
@@ -133,6 +148,23 @@ namespace Captivlink.Api
                 options.User.RequireUniqueEmail = false;
                 options.User.AllowedUserNameCharacters += "'";
             });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+
+            services.AddSwaggerConfig<BackendApiSwaggerOptions, AuthorizeCheckOperationFilter>(
+                Program.Application.Authority,
+                new Dictionary<string, string>
+                {
+                    { "captivlink-backend", "Captivlink Backend API" }
+                }, disableSwagger: false);
+            services.AddSwaggerGen();
+            services.AddSession();
+            services.AddApplicationServices();
         }
 
         public class IdentityWithAdditionalClaimsProfileService : IProfileService
@@ -251,12 +283,23 @@ namespace Captivlink.Api
             });
 
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
+            app.UseCors(
+                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
+
+            if (Program.Application.Switches.EnableSwagger)
+            {
+                app.UseSwaggerForApi("captivlink-backend-swagger", opts =>
+                {
+                    opts.OAuthAppName("Captivlink Backend Swagger UI");
+                });
+            }
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
             });
         }

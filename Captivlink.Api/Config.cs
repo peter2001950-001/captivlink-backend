@@ -63,8 +63,7 @@ namespace Captivlink.Api
             var clientBaseUrls = GetUrlsForEnvironment(environment);
 
             var uiBaseUrls = clientBaseUrls.FirstOrDefault(x => x.Key == "frontend").Value;
-            var backendBaseUrls = clientBaseUrls.FirstOrDefault(x => x.Key == "backend").Value;
-            var apiBaseUrls = clientBaseUrls.FirstOrDefault(x => x.Key == "api").Value;
+            var backendBaseUrls = clientBaseUrls.FirstOrDefault(x => x.Key == "api").Value;
             var adminBaseUrls = clientBaseUrls.FirstOrDefault(x => x.Key == "admin").Value;
 
             return new Client[]
@@ -128,7 +127,7 @@ namespace Captivlink.Api
                     {
                         {"frontend", new[] {"http://localhost:4200"}},
                         {"backend", new[] {"https://localhost:5100"}},
-                        {"api", new[] {"https://localhost:5200"}},
+                        {"api", new[] {"https://localhost:5001"}},
                     };
             }
         }
