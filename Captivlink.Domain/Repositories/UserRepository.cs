@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Captivlink.Infrastructure.Data;
 using Captivlink.Infrastructure.Domain;
 using Captivlink.Infrastructure.Repositories.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Captivlink.Infrastructure.Repositories
 {
@@ -19,7 +20,15 @@ namespace Captivlink.Infrastructure.Repositories
 
         public async Task<ApplicationUser?> GetUserById(Guid userId)
         {
-            return _dbContext.Users.FirstOrDefault(x => x.Id == userId);
+            return await _dbContext.Users.Include(x => x.Company).Include(x=>x.Person).FirstOrDefaultAsync(x => x.Id == userId);
+        }
+
+        public async Task<ApplicationUser> UpdateAsync(ApplicationUser user)
+        {
+            _dbContext.Update(user);
+            await _dbContext.SaveChangesAsync();
+
+            return user;
         }
     }
 }

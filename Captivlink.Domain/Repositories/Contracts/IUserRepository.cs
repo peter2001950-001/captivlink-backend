@@ -10,5 +10,6 @@ namespace Captivlink.Infrastructure.Repositories.Contracts
     public interface IUserRepository
     {
         Task<ApplicationUser?> GetUserById(Guid userId);
+        Task<ApplicationUser> UpdateAsync(ApplicationUser user);
     }
 }

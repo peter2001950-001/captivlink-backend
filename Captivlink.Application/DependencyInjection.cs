@@ -21,6 +21,7 @@ namespace Captivlink.Application
             services.AddFluentValidationAutoValidation();
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(thisAssembly));
             services.AddRepositories();
+            services.AddFluentValidation(p => p.RegisterValidatorsFromAssembly(thisAssembly));
 
             RegisterValidationPipelineCommands(services);
         }

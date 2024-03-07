@@ -1,12 +1,13 @@
 ﻿using System.Linq.Expressions;
 using Captivlink.Infrastructure.Data;
 using Captivlink.Infrastructure.Domain;
+using Captivlink.Infrastructure.Repositories.Contracts;
 using Captivlink.Infrastructure.Utility;
 using Microsoft.EntityFrameworkCore;
 
 namespace Captivlink.Infrastructure.Repositories
 {
-    public abstract class BaseRepository<TEntity> where TEntity : Entity
+    public abstract class BaseRepository<TEntity> where TEntity : Entity, IBaseRepository<TEntity>
     {
         protected readonly ApplicationDbContext DbContext;
 

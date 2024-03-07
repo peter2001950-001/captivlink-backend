@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Captivlink.Backend", "Capti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Captivlink.Infrastructure", "Captivlink.Domain\Captivlink.Infrastructure.csproj", "{C474E69D-2C5A-491E-867F-3EF157C37738}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Captivlink.Application", "Captivlink.Application\Captivlink.Application.csproj", "{051C5FC5-3FB3-413B-948B-CF49C7034258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Captivlink.Application", "Captivlink.Application\Captivlink.Application.csproj", "{051C5FC5-3FB3-413B-948B-CF49C7034258}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

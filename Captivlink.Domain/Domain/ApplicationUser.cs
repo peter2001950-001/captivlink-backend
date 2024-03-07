@@ -7,5 +7,7 @@ namespace Captivlink.Infrastructure.Domain
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public CompanyDetails? Company { get; set; }
+        public PersonDetails? Person { get; set; }
     }
 }

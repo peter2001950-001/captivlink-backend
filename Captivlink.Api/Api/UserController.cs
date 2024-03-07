@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Captivlink.Api.Models.Requests;
 using Captivlink.Api.Utility;
+using Captivlink.Application.Users.Commands;
 using Captivlink.Application.Users.Queries;
 using Captivlink.Application.Users.Results;
 using IdentityServer4;
@@ -14,14 +16,15 @@ namespace Captivlink.Api.Api
 {
     [Route("api/user")]
     [ApiController]
-    [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName, Roles = "ContentCreator")]
-    public class UserController : ControllerBase
+    [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName, Roles = "ContentCreator, Business")]
+    public class UserController : AbstractController
     {
         private readonly IMediator _mediator;
-
-        public UserController(IMediator mediator)
+        private readonly IMapper _mapper;
+        public UserController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpGet("profile")]
@@ -41,6 +44,25 @@ namespace Captivlink.Api.Api
             user.Role = User.GetRole();
 
             return Ok(user);
+        }
+
+        [HttpPut("profile")]
+        [TrimInputStrings]
+        [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
+        [SwaggerResponse(200, "Success")]
+        [SwaggerResponse(400, "Bad request")]
+        [SwaggerResponse(404, "Not found")]
+        public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateProfileRequest request)
+        {
+            var command = _mapper.Map<UpdateProfileCommand>(request);
+            command.UserId = User.GetUserGuid();
+            command.UserRole = User.GetRole();
+
+            var result = await _mediator.Send(command);
+            if (!result.IsValid)
+                return ValidationProblem(result);
+
+            return Ok();
         }
     }
 }

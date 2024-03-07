@@ -25,7 +25,7 @@ namespace Captivlink.Api
 
             public static SwitchesSection Switches => Configuration.GetSection("Switches").Get<SwitchesSection>();
             public static AuthorityConfig Authority => Configuration.GetSection("Authority").Get<AuthorityConfig>();
-
+            public static string FrontendUrl => Configuration.GetSection("FrontendUrl").Get<string>();
             public class SwitchesSection
             {
                 public bool UseAccessToken { get; set; }

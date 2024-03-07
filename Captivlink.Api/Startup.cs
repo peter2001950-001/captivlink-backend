@@ -32,6 +32,7 @@ using Captivlink.Api.Utility;
 using Captivlink.Api.Utility.Swagger;
 using Captivlink.Application;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Captivlink.Api
 {
@@ -151,9 +152,9 @@ namespace Captivlink.Api
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = $"/Identity/Account/Login";
-                options.LogoutPath = $"/Identity/Account/Logout";
-                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+                options.LoginPath = $"/Account/Login";
+                options.LogoutPath = $"/Account/Logout";
+                options.AccessDeniedPath = $"/Account/AccessDenied";
             });
 
             services.AddSwaggerConfig<BackendApiSwaggerOptions, AuthorizeCheckOperationFilter>(
@@ -165,6 +166,14 @@ namespace Captivlink.Api
             services.AddSwaggerGen();
             services.AddSession();
             services.AddApplicationServices();
+
+            var thisAssembly = typeof(Startup).Assembly;
+            services.AddAutoMapper(thisAssembly);
+            services.AddMvcCore().AddJsonOptions(opts =>
+            {
+                var enumConverter = new JsonStringEnumConverter();
+                opts.JsonSerializerOptions.Converters.Add(enumConverter);
+            });
         }
 
         public class IdentityWithAdditionalClaimsProfileService : IProfileService

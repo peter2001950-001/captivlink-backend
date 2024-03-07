@@ -1,0 +1,40 @@
+﻿@model Captivlink.Api.Identity.Account.RegisterInputModel
+
+<div class="text-center mb-5">
+    <div class="h3 mb-3 fw-normal">Fill your details</div>
+    <span class="text-600 font-medium">Enter the information about yourself</span>
+</div>
+
+<partial name="_ValidationSummary" />
+<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form asp-route="RegisterDetails" class="space-y-6" method="post">
+        <input asp-for="Role" type="hidden"/>
+
+        <div class="form-floating">
+            <input class="form-control w-30rem" placeholder="First name" asp-for="FirstName" autofocus>
+            <label class="block text-sm font-medium leading-6 text-gray-900" asp-for="FirstName"></label>
+        </div>
+        <div class="form-floating mt-2">
+            <input class="form-control w-30rem" placeholder="Last name" asp-for="LastName" autofocus>
+            <label class="block text-sm font-medium leading-6 text-gray-900" asp-for="LastName"></label>
+        </div>
+
+        <div class="form-floating mt-2">
+            <input class="form-control w-30rem" type="email" placeholder="Last name" asp-for="Email" autofocus>
+            <label class="block text-sm font-medium leading-6 text-gray-900" asp-for="Email"></label>
+        </div>
+
+        <div class="form-floating mt-2">
+            <input class="form-control w-30rem" type="password" placeholder="Last name" asp-for="Password" autofocus>
+            <label class="block text-sm font-medium leading-6 text-gray-900" asp-for="Password"></label>
+        </div>
+        <div class="form-floating mt-2">
+             <input class="form-control w-30rem" type="password" placeholder="Last name" asp-for="ConfirmPassword" autofocus>
+            <label class="block text-sm font-medium leading-6 text-gray-900" asp-for="ConfirmPassword"></label>
+        </div>
+
+        <div>
+            <button type="submit" class="d-flex w-100 justify-content-center btn btn-primary mt-3">Continue</button>
+        </div>
+    </form> 
+</div>
