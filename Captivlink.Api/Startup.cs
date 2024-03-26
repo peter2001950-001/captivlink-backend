@@ -33,6 +33,7 @@ using Captivlink.Api.Utility.Swagger;
 using Captivlink.Application;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Captivlink.Api.Utility.CategorySeeder;
 
 namespace Captivlink.Api
 {
@@ -279,6 +280,10 @@ namespace Captivlink.Api
         public void Configure(IApplicationBuilder app)
         {
             Seeder.SeedDatabase(app.ApplicationServices).GetAwaiter().GetResult();
+            
+            using var scope = app.ApplicationServices.CreateScope();
+            var categorySeeder = scope.ServiceProvider.GetRequiredService<ICategorySeeder>();
+            categorySeeder.SeedCategories().GetAwaiter().GetResult();
 
             if (Environment.IsDevelopment())
             {

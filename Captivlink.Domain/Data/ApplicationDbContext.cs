@@ -30,5 +30,7 @@ namespace Captivlink.Infrastructure.Data
         {
             await base.SaveChangesAsync();
         }
+
+        public DbSet<Category> Categories { get; set; }
     }
 }

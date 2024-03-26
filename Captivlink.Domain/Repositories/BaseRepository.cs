@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Captivlink.Infrastructure.Repositories
 {
-    public abstract class BaseRepository<TEntity> where TEntity : Entity, IBaseRepository<TEntity>
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : Entity
     {
         protected readonly ApplicationDbContext DbContext;
 
@@ -18,7 +18,7 @@ namespace Captivlink.Infrastructure.Repositories
 
         protected abstract IQueryable<TEntity> Query { get; }
 
-        public async Task<IEnumerable<TEntity>> FindAllAsync(PaginationOptions request)
+        public async Task<IEnumerable<TEntity>> FindAllAsync(PaginationOptions? request)
         {
             return await Query.Sorted(request).Paged(request).ToListAsync();
         }
@@ -57,16 +57,15 @@ namespace Captivlink.Infrastructure.Repositories
             return entity;
         }
 
-        public virtual async Task<TEntity?> UpdateAsync(Guid id, TEntity entity)
+        public virtual async Task<TEntity?> UpdateAsync(TEntity entity)
         {
-            entity.Id = id;
             if (await CanUpdateAsync(entity))
             {
                 var localEntity = await Query.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.Id);
                 if (localEntity == null)
                     return null;
 
-                entity = await BeforeUpdateAsync(id, entity, localEntity);
+                entity = await BeforeUpdateAsync(entity.Id, entity, localEntity);
 
                 DbContext.Update(entity);
                 await DbContext.SaveChangesAsync();
@@ -84,7 +83,8 @@ namespace Captivlink.Infrastructure.Repositories
 
             if (await CanDeleteAsync(entity))
             {
-                DbContext.Remove(entity);
+                entity.IsDeleted = true;
+                entity.DeletedOn = DateTime.UtcNow;
                 await DbContext.SaveChangesAsync();
             }
         }

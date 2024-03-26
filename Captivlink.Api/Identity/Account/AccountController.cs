@@ -282,7 +282,7 @@ namespace Captivlink.Api.Identity.Account
             var vm = new LoggedOutViewModel
             {
                 AutomaticRedirectAfterSignOut = AccountOptions.AutomaticRedirectAfterSignOut,
-                PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
+                PostLogoutRedirectUri = Program.Application.FrontendUrl,
                 ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
                 SignOutIframeUrl = logout?.SignOutIFrameUrl,
                 LogoutId = logoutId

@@ -11,6 +11,7 @@ namespace Captivlink.Infrastructure
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUnitOfWork, ApplicationDbContext>();
             return services;
         }

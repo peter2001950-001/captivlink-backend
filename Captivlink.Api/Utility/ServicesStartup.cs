@@ -1,8 +1,10 @@
-﻿using Captivlink.Backend.Utility;
+﻿using Captivlink.Api.Utility;
+using Captivlink.Api.Utility.CategorySeeder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 [assembly: HostingStartup(typeof(ServicesStartup))]
-namespace Captivlink.Backend.Utility
+namespace Captivlink.Api.Utility
 {
 
     public class ServicesStartup : IHostingStartup
@@ -11,7 +13,7 @@ namespace Captivlink.Backend.Utility
         {
             builder.ConfigureServices((context, services) =>
             {
-                //services.AddTransient<IAccountService, AccountService>()
+                services.AddTransient<ICategorySeeder, CategorySeeder.CategorySeeder>();
             });
         }
     }

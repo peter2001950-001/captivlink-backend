@@ -35,4 +35,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\DummyData\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Data\DummyData\categories.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
