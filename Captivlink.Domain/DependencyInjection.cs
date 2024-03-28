@@ -13,6 +13,7 @@ namespace Captivlink.Infrastructure
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUnitOfWork, ApplicationDbContext>();
+            services.AddScoped<IWebsiteRepository, WebsiteRepository>();
             return services;
         }
     }

@@ -21,5 +21,6 @@ namespace Captivlink.Infrastructure.Repositories.Contracts
         Task<TEntity> AddAsync(TEntity entity);
         Task<TEntity?> UpdateAsync(TEntity entity);
         Task DeleteAsync(Guid id);
+        Task<int> CountWhereAsync(Expression<Func<TEntity, bool>> whereExpression);
     }
 }

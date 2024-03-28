@@ -17,30 +17,38 @@ namespace Captivlink.Infrastructure.Repositories
         }
 
         protected abstract IQueryable<TEntity> Query { get; }
+        private IQueryable<TEntity> Entities => Query.Where(x => !x.IsDeleted);
 
         public async Task<IEnumerable<TEntity>> FindAllAsync(PaginationOptions? request)
         {
-            return await Query.Sorted(request).Paged(request).ToListAsync();
+            return await Entities.Sorted(request).Paged(request).ToListAsync();
         }
 
         public async Task<IEnumerable<TEntity>> FindWhereAsync(Expression<Func<TEntity, bool>> whereExpression, PaginationOptions? request)
         {
-            return await Query.Where(whereExpression).Sorted(request).Paged(request).ToListAsync();
+            return await Entities.Where(whereExpression).Sorted(request).Paged(request).ToListAsync();
         }
 
         public async Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> whereExpression)
         {
-            return await Query.Where(whereExpression).FirstOrDefaultAsync();
+            return await Entities.Where(whereExpression).FirstOrDefaultAsync();
         }
 
         public async Task<int> CountAllAsync()
         {
-            return await Query.CountAsync();
+            return await Entities.CountAsync();
         }
 
-        public virtual async Task<TEntity?> GetByIdAsync(Guid id, bool hasTracking = true)
+        public async Task<int> CountWhereAsync(Expression<Func<TEntity, bool>> whereExpression)
         {
-            return await Query.FirstOrDefaultAsync(x => x.Id == id);
+            return await Entities.Where(whereExpression).CountAsync();
+        }
+
+        public virtual async Task<TEntity?> GetByIdAsync(Guid id, bool includeDeleted = false)
+        {
+            if(includeDeleted)
+                return await Query.FirstOrDefaultAsync(x => x.Id == id);
+            return await Entities.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)

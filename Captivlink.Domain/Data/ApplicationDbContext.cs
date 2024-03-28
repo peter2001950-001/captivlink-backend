@@ -32,5 +32,6 @@ namespace Captivlink.Infrastructure.Data
         }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Website> Websites { get; set; }
     }
 }
