@@ -74,7 +74,7 @@ namespace Captivlink.Api.Api
         [SwaggerResponse(200, "Success", typeof(PaginatedResult<WebsiteResult>))]
         [SwaggerResponse(400, "Bad request")]
         [SwaggerResponse(404, "Not found")]
-        public async Task<IActionResult> UpdateWebsiteAsync([FromQuery] PaginationRequest request)
+        public async Task<IActionResult> GetWebsitesAsync([FromQuery] PaginationRequest request)
         {
             var command = _mapper.Map<GetAllWebsiteQuery>(request);
             command.UserId = User.GetUserGuid();

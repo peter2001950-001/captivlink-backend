@@ -1,8 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
-using IdentityServer4;
+﻿using IdentityServer4;
 using Captivlink.Api.Data;
 using Captivlink.Infrastructure.Data;
 using Captivlink.Infrastructure.Domain;
@@ -34,6 +30,7 @@ using Captivlink.Application;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Captivlink.Api.Utility.CategorySeeder;
+using Microsoft.Extensions.Logging;
 
 namespace Captivlink.Api
 {
@@ -104,6 +101,13 @@ namespace Captivlink.Api
                 });
             });
             services.AddTransient<IProfileService, IdentityWithAdditionalClaimsProfileService>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
 
             services.AddIdentityServer(options =>
             {
@@ -174,6 +178,14 @@ namespace Captivlink.Api
             {
                 var enumConverter = new JsonStringEnumConverter();
                 opts.JsonSerializerOptions.Converters.Add(enumConverter);
+            });
+
+            services.AddSingleton<ICorsPolicyService>((container) => {
+                var logger = container.GetRequiredService<ILogger<DefaultCorsPolicyService>>();
+                return new DefaultCorsPolicyService(logger)
+                {
+                    AllowedOrigins = { "http://localhost:4200"}
+                };
             });
         }
 
@@ -295,14 +307,12 @@ namespace Captivlink.Api
 
                 await next();
             });
-
+            app.UseMiddleware<InvalidAccessTokenMiddleware>();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseCors(
-                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
-            );
+            app.UseCors("CorsPolicy");
 
             if (Program.Application.Switches.EnableSwagger)
             {
