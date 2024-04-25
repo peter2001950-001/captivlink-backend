@@ -18,8 +18,13 @@ namespace Captivlink.Infrastructure.Data
         {
             builder.ApplyConfiguration(new PersonDetailsConfiguration());
             builder.ApplyConfiguration(new CompanyDetailsConfiguration());
+            builder.ApplyConfiguration(new CampaignConfiguration());
             builder.Entity<ApplicationUser>().HasOne(x => x.Person);
             builder.Entity<ApplicationUser>().HasOne(x => x.Company);
+
+            builder.Entity<Campaign>().HasOne(x => x.Company).WithMany().IsRequired()
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
@@ -33,5 +38,6 @@ namespace Captivlink.Infrastructure.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Website> Websites { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
     }
 }

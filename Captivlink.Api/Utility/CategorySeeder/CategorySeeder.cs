@@ -58,6 +58,10 @@ namespace Captivlink.Api.Utility.CategorySeeder
                 });
                 categoryModel.Id = existingCategory.Id;
             }
+            else
+            {
+                touchedCategories.Add(existingCategory);
+            }
 
             if (categoryModel.Children != null && categoryModel.Children.Any())
             {
