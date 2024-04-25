@@ -56,7 +56,7 @@ namespace Captivlink.Api
             services.AddControllersWithViews();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -124,14 +124,14 @@ namespace Captivlink.Api
                 {
                     options.ConfigureDbContext = b =>
                     {
-                        b.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+                        b.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
                     };
                 })
                 .AddOperationalStore<AzurePersistedGrantDbContext>(options =>
                 {
                     options.ConfigureDbContext = b =>
                     {
-                        b.UseSqlServer(connectionString, sql => { sql.MigrationsAssembly(migrationsAssembly); });
+                        b.UseNpgsql(connectionString, sql => { sql.MigrationsAssembly(migrationsAssembly); });
                     };
                     options.EnableTokenCleanup = true;
                 })

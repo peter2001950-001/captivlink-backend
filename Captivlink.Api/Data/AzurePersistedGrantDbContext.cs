@@ -10,7 +10,10 @@ namespace Captivlink.Api.Data
         public AzurePersistedGrantDbContext(DbContextOptions<AzurePersistedGrantDbContext> options,
             OperationalStoreOptions storeOptions) : base(options, storeOptions)
         {
-            this.ApplyAzureManagedIdentityToken(Program.Application.Switches.UseAccessToken);
+            if (this.Database.IsSqlServer())
+            {
+                this.ApplyAzureManagedIdentityToken(Program.Application.Switches.UseAccessToken);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

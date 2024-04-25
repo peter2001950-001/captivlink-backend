@@ -10,7 +10,11 @@ namespace Captivlink.Api.Data
         public AzureConfigurationDbContext(DbContextOptions<AzureConfigurationDbContext> options,
             ConfigurationStoreOptions storeOptions) : base(options, storeOptions)
         {
-            this.ApplyAzureManagedIdentityToken(Program.Application.Switches.UseAccessToken);
+            if (this.Database.IsSqlServer())
+            {
+                this.ApplyAzureManagedIdentityToken(Program.Application.Switches.UseAccessToken);
+            }
+           
         }
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)

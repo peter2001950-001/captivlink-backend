@@ -9,7 +9,7 @@ namespace Captivlink.Infrastructure.Utility
         public ApplicationDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=CaptivlinkDb;Integrated Security=True;");
+            optionsBuilder.UseNpgsql("User ID=postgres;Password=123456;Host=localhost;Port=5432;Database=captivlink-db;");
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }
