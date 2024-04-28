@@ -60,7 +60,6 @@ namespace Captivlink.Application.Campaigns.Commands.Validators
                 }
             });
 
-            RuleFor(x => x.EventName).NotEmpty().MinimumLength(8).MaximumLength(80);
             RuleFor(x => x.Images).NotEmpty();
             RuleFor(x => x.Link).NotEmpty();
             RuleFor(x => x.UserId).NotEmpty();

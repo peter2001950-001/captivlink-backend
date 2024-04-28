@@ -38,6 +38,7 @@ namespace Captivlink.Application.Campaigns.Commands.Handlers
                 return new(new ValidationFailure("websiteId", "Website is not found"));
             }
 
+            entity.EventName = Guid.NewGuid().ToString();
             entity.Website = website;
             entity.Categories = await _categoryRepository.GetCategoriesFromListAsync(request.Categories);
             entity.Company = user.Company;

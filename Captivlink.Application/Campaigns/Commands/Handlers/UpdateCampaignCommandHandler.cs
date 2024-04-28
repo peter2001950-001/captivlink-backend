@@ -71,7 +71,6 @@ namespace Captivlink.Application.Campaigns.Commands.Handlers
             campaign.InternalName = request.InternalName;
             campaign.ExternalName = request.ExternalName;
             campaign.Description = request.Description;
-            campaign.EventName = request.EventName;
             campaign.Categories = await _categoryRepository.GetCategoriesFromListAsync(request.Categories);
             campaign.Images = request.Images;
             campaign.Link = request.Link;

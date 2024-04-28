@@ -31,12 +31,6 @@ namespace Captivlink.Application.Campaigns.Commands.Validators
                     context.AddFailure("UserId", "User is not activated");
                     return;
                 }
-
-                var campaings = await campaignRepository!.CountWhereAsync(x => x.EventName == entity.EventName && x.Company.Id == user.Company.Id && x.Id != entity.Id);
-                if (campaings > 0)
-                {
-                    context.AddFailure("EventName", "Event name must be unique");
-                }
             });
         }
     }

@@ -12,7 +12,6 @@ namespace Captivlink.Api.Models.Requests
         public string ExternalName { get; set; }
         public string Description { get; set; }
         public List<Guid> Categories { get; set; }
-        public string EventName { get; set; }
         public List<AwardModel> Awards { get; set; }
         public string Link { get; set; }
         public decimal BudgetPerCreator { get; set; }
