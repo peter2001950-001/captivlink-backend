@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Captivlink.Application.Campaigns.Results
+namespace Captivlink.Application.Commons
 {
     public class CategoryResult
     {

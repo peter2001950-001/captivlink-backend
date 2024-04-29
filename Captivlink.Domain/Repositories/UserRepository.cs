@@ -20,7 +20,7 @@ namespace Captivlink.Infrastructure.Repositories
 
         public async Task<ApplicationUser?> GetUserById(Guid userId)
         {
-            return await _dbContext.Users.Include(x => x.Company).Include(x=>x.Person).FirstOrDefaultAsync(x => x.Id == userId);
+            return await _dbContext.Users.Include(x => x.Company).Include(x => x.Person).ThenInclude(x => x !=null ? x.Categories : null).FirstOrDefaultAsync(x => x.Id == userId);
         }
 
         public async Task<ApplicationUser> UpdateAsync(ApplicationUser user)

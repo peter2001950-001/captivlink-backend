@@ -3,6 +3,7 @@ using Captivlink.Application.Campaigns.Commands;
 using Captivlink.Application.Campaigns.Commands.Models;
 using Captivlink.Application.Campaigns.Queries;
 using Captivlink.Application.Campaigns.Results;
+using Captivlink.Application.Commons;
 using Captivlink.Infrastructure.Domain;
 using Captivlink.Infrastructure.Utility;
 

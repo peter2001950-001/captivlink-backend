@@ -16,6 +16,9 @@ namespace Captivlink.Application.Users.Commands.Validators
             RuleFor(x => x.Description).NotEmpty().Length(0, 2500);
             RuleFor(x => x.Nickname).NotEmpty().Length(0, 80);
             RuleFor(x => x.SocialMediaLinks).NotEmpty().Must(x => x.Count < 10).WithMessage("Social links count should be less than 10");
+            RuleFor(x => x.Avatar).NotEmpty();
+            RuleFor(x => x.Nationality).NotEmpty().Length(0, 3);
+            RuleFor(x => x.Categories).NotEmpty();
         }
     }
 }

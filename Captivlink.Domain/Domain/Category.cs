@@ -7,5 +7,6 @@ namespace Captivlink.Infrastructure.Domain
         public string Name { get; set; }
         public Category? Parent { get; set; }
         public ICollection<Campaign> Campaigns { get; set; }
+        public ICollection<PersonDetails> PersonDetails { get; set; }
     }
 }

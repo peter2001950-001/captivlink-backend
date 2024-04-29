@@ -13,10 +13,14 @@ namespace Captivlink.Application.Users.Mappings
                 .ForMember(x => x.PersonDetails, o=>o.MapFrom(t => t.Person))
                 .ForMember(x => x.CompanyDetails, o=>o.MapFrom(t => t.Company));
             CreateMap<CompanyDetails, CompanyResult>();
-            CreateMap<PersonDetails, PersonResult>();
+            CreateMap<PersonDetails, PersonResult>()
+                .ForMember(x => x.Nationality, m=>m.MapFrom(o => o.Country))
+                .ForMember(x => x.Categories, o=>o.MapFrom(m => m.Categories));
             CreateMap<SocialLink, SocialLinkResult>();
 
-            CreateMap<PersonModel, PersonDetails>();
+            CreateMap<PersonModel, PersonDetails>()
+                .ForMember(x => x.Categories, o=>o.Ignore())
+                .ForMember(x=>x.Country, m=>m.MapFrom(o=>o.Nationality));
             CreateMap<SocialLinkModel, SocialLink>();
 
             CreateMap<CompanyModel, CompanyDetails>();
