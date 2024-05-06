@@ -11,6 +11,6 @@ namespace Captivlink.Infrastructure.Repositories
         {
         }
 
-        protected override IQueryable<Campaign> Query => DbContext.Campaigns.Include(x => x.Categories).Include(x => x.Website).Include(x => x.Awards);
+        protected override IQueryable<Campaign> Query => DbContext.Campaigns.Include(x => x.Categories).Include(x => x.Website).Include(x => x.Awards).Include(x=>x.Company);
     }
 }

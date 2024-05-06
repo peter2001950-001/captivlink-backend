@@ -5,7 +5,7 @@ using Captivlink.Infrastructure.Repositories.Contracts;
 
 namespace Captivlink.Application.Campaigns.Queries.Handlers
 {
-    public class GetByIdCampaignQueryHandler : IQueryHandler<GetByIdCampaignQuery, CampaignResult?>
+    public class GetByIdCampaignQueryHandler : IQueryHandler<GetByIdCampaignQuery, CampaignBusinessResult?>
 
     {
         private readonly IUserRepository _userRepository;
@@ -19,7 +19,7 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
             _campaignRepository = campaignRepository;
         }
 
-        public async Task<CampaignResult?> Handle(GetByIdCampaignQuery request, CancellationToken cancellationToken)
+        public async Task<CampaignBusinessResult?> Handle(GetByIdCampaignQuery request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetUserById(request.UserId);
             if (user?.Company == null)
@@ -29,7 +29,7 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
 
             var result = await _campaignRepository.GetFirstOrDefaultAsync(x => x.Company.Id == user.Company.Id && x.Id == request.CampaignId);
             
-            return result == null ? null : _mapper.Map<CampaignResult>(result);
+            return result == null ? null : _mapper.Map<CampaignBusinessResult>(result);
         }
     }
 }

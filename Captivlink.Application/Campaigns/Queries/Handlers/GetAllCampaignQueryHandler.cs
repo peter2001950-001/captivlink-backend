@@ -13,7 +13,7 @@ using Captivlink.Infrastructure.Repositories.Contracts;
 
 namespace Captivlink.Application.Campaigns.Queries.Handlers
 {
-    public class GetAllCampaignQueryHandler : IQueryHandler<GetAllCampaignQuery, PaginatedResult<CampaignResult>?>
+    public class GetAllCampaignQueryHandler : IQueryHandler<GetAllCampaignQuery, PaginatedResult<CampaignBusinessResult>?>
     {
         private readonly ICampaignRepository _campaignRepository;
         private readonly IUserRepository _userRepository;
@@ -26,7 +26,7 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
             _mapper = mapper;
         }
 
-        public async Task<PaginatedResult<CampaignResult>?> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<CampaignBusinessResult>?> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetUserById(request.UserId);
             var paginatedOptions = _mapper.Map<PaginationOptions>(request);
@@ -38,8 +38,8 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
             var result = await _campaignRepository.FindWhereAsync(x => x.Company.Id == user.Company.Id, paginatedOptions);
             var count = await _campaignRepository.CountWhereAsync(x => x.Company.Id == user.Company.Id);
 
-            return new PaginatedResult<CampaignResult>(paginatedOptions, count,
-                _mapper.Map<IEnumerable<CampaignResult>>(result));
+            return new PaginatedResult<CampaignBusinessResult>(paginatedOptions, count,
+                _mapper.Map<IEnumerable<CampaignBusinessResult>>(result));
         }
     }
 }

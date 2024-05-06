@@ -19,11 +19,15 @@ namespace Captivlink.Application.Campaigns.Mappings
 
             CreateMap<AwardModel, Award>();
 
-            CreateMap<Campaign, CampaignResult>();
+            CreateMap<Campaign, CampaignBusinessResult>();
+            CreateMap<Campaign, CampaignCreatorResult>();
+
             CreateMap<Award, AwardResult>();
             CreateMap<Category, CategoryResult>();
+            CreateMap<CompanyDetails, CompanyResult>();
 
             CreateMap<GetAllCampaignQuery, PaginationOptions>();
+            CreateMap<GetCampaignFeedQuery, PaginationOptions>();
         }
 
     }

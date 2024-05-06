@@ -11,6 +11,7 @@ namespace Captivlink.Api.Mappings
         {
             CreateMap<CampaignRequest, CreateCampaignCommand>();
             CreateMap<PaginationRequest, GetAllCampaignQuery>();
+            CreateMap<PaginationRequest, GetCampaignFeedQuery>();
 
             CreateMap<CampaignRequest, UpdateCampaignCommand>();
         }

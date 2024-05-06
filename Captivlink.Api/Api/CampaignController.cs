@@ -49,7 +49,7 @@ namespace Captivlink.Api.Api
         }
 
         [HttpGet]
-        [SwaggerResponse(200, "Success", typeof(PaginatedResult<CampaignResult>))]
+        [SwaggerResponse(200, "Success", typeof(PaginatedResult<CampaignBusinessResult>))]
         [SwaggerResponse(400, "Bad request")]
         [SwaggerResponse(404, "Not found")]
         public async Task<IActionResult> GetAllCampaignsAsync([FromQuery] PaginationRequest request)
@@ -88,7 +88,7 @@ namespace Captivlink.Api.Api
         }
 
         [HttpGet("{id}")]
-        [SwaggerResponse(200, "Success", typeof(CampaignResult))]
+        [SwaggerResponse(200, "Success", typeof(CampaignBusinessResult))]
         [SwaggerResponse(400, "Bad request")]
         [SwaggerResponse(404, "Not found")]
         public async Task<IActionResult> GetByIdAsync(Guid id)

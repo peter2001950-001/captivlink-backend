@@ -10,7 +10,7 @@ using Captivlink.Application.Commons;
 
 namespace Captivlink.Application.Campaigns.Results
 {
-    public class CampaignResult
+    public class CampaignBusinessResult
     {
         public Guid Id { get; set; }
         public List<string> Images { get; set; }

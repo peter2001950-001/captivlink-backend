@@ -8,7 +8,7 @@ using Captivlink.Application.Interfaces.ValidatorPipelines.Queries;
 
 namespace Captivlink.Application.Campaigns.Queries
 {
-    public class GetByIdCampaignQuery : IQuery<CampaignResult?>
+    public class GetByIdCampaignQuery : IQuery<CampaignBusinessResult?>
     {
         public Guid UserId { get; set; }
 
