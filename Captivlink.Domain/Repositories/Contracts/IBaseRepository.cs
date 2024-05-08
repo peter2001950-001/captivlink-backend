@@ -16,6 +16,12 @@ namespace Captivlink.Infrastructure.Repositories.Contracts
         Task<IEnumerable<TEntity>> FindWhereAsync(Expression<Func<TEntity, bool>> whereExpression,
             PaginationOptions? request);
 
+        Task<PaginatedResult<TEntity>> GetPagedAsync(PaginationOptions request,
+            Expression<Func<TEntity, bool>>[] whereExpressions);
+
+        Task<PaginatedResult<TEntity>> GetPagedAsync(PaginationOptions request,
+            Expression<Func<TEntity, bool>> whereExpressions);
+
         Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> whereExpression);
         Task<int> CountAllAsync();
         Task<TEntity> AddAsync(TEntity entity);

@@ -29,6 +29,30 @@ namespace Captivlink.Infrastructure.Repositories
             return await Entities.Where(whereExpression).Sorted(request).Paged(request).ToListAsync();
         }
 
+        public async Task<PaginatedResult<TEntity>> GetPagedAsync(PaginationOptions request, Expression<Func<TEntity, bool>>[] whereExpressions)
+        {
+            var items = Entities;
+            foreach (var whereExpression in whereExpressions)
+            {
+                items = Entities.Where(whereExpression);
+            }
+
+            var pagedItems = await items.Sorted(request).Paged(request).ToListAsync();
+            var totalCount = await items.CountAsync();
+
+            return new PaginatedResult<TEntity>(request, totalCount, pagedItems);
+        }
+
+
+        public async Task<PaginatedResult<TEntity>> GetPagedAsync(PaginationOptions request, Expression<Func<TEntity, bool>> whereExpressions)
+        {
+            var items = Entities.Where(whereExpressions);
+            var pagedItems = await items.Sorted(request).Paged(request).ToListAsync();
+            var totalCount = await items.CountAsync();
+
+            return new PaginatedResult<TEntity>(request, totalCount, pagedItems);
+        }
+
         public async Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> whereExpression)
         {
             return await Entities.Where(whereExpression).FirstOrDefaultAsync();

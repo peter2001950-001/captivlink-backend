@@ -15,6 +15,7 @@ namespace Captivlink.Infrastructure
             services.AddScoped<IUnitOfWork, ApplicationDbContext>();
             services.AddScoped<IWebsiteRepository, WebsiteRepository>();
             services.AddScoped<ICampaignRepository, CampaignRepository>();
+            services.AddScoped<ICampaignPartnerRepository, CampaignPartnerRepository>();
             return services;
         }
     }

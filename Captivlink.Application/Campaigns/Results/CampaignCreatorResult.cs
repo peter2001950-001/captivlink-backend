@@ -17,6 +17,7 @@ namespace Captivlink.Application.Campaigns.Results
         public DateTime EndDateTime { get; set; }
         public CampaignStatus Status { get; set; }
         public CompanyResult Company { get; set; }
+        public CreatorPartnerResult? Partnership { get; set; }
         public DateTime CreatedOn { get; set; }
     }
 }

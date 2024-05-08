@@ -108,5 +108,71 @@ namespace Captivlink.Api.Api
 
             return Ok(result);
         }
+
+        [HttpGet("{id}/partners")]
+        [SwaggerResponse(200, "Success", typeof(PaginatedResult<CampaignPartnerResult>))]
+        [SwaggerResponse(400, "Bad request")]
+        [SwaggerResponse(404, "Not found")]
+        public async Task<IActionResult> GetCampaignPartnersAsync(Guid id, [FromQuery] PaginationRequest request)
+        {
+            var query = _mapper.Map<GetCampaignPartnersQuery>(request);
+            query.CampaignId = id;
+            query.UserId = User.GetUserGuid();
+
+            var result = await _mediatr.Send(query);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("partner/{partnerId}/approve")]
+        [SwaggerResponse(200, "Success")]
+        [SwaggerResponse(400, "Bad request")]
+        [SwaggerResponse(404, "Not found")]
+        public async Task<IActionResult> ApprovePartnerAsync(Guid partnerId)
+        {
+            var command = new ApproveOrRejectPartnerCommand()
+            {
+                CampaignPartnerId = partnerId,
+                Outcome = PartnerOutcome.Approve,
+                UserId = User.GetUserGuid()
+            };
+
+            var result = await _mediatr.Send(command);
+
+            if (!result.IsValid)
+            {
+                return ValidationProblem(result);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("partner/{partnerId}/reject")]
+        [SwaggerResponse(200, "Success")]
+        [SwaggerResponse(400, "Bad request")]
+        [SwaggerResponse(404, "Not found")]
+        public async Task<IActionResult> RejectPartnerAsync(Guid partnerId)
+        {
+            var command = new ApproveOrRejectPartnerCommand()
+            {
+                CampaignPartnerId = partnerId,
+                Outcome = PartnerOutcome.Approve,
+                UserId = User.GetUserGuid()
+            };
+
+            var result = await _mediatr.Send(command);
+
+            if (!result.IsValid)
+            {
+                return ValidationProblem(result);
+            }
+
+            return Ok();
+        }
     }
 }

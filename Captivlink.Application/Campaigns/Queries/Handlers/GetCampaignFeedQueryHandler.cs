@@ -12,12 +12,14 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
         private readonly ICampaignRepository _campaignRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly ICampaignPartnerRepository _campaignPartnerRepository;
 
-        public GetCampaignFeedQueryHandler(ICampaignRepository campaignRepository, IUserRepository userRepository, IMapper mapper)
+        public GetCampaignFeedQueryHandler(ICampaignRepository campaignRepository, IUserRepository userRepository, IMapper mapper, ICampaignPartnerRepository campaignPartnerRepository)
         {
             _campaignRepository = campaignRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _campaignPartnerRepository = campaignPartnerRepository;
         }
 
         public async Task<PaginatedResult<CampaignCreatorResult>?> Handle(GetCampaignFeedQuery request, CancellationToken cancellationToken)
@@ -38,8 +40,27 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
             var count = await _campaignRepository.CountWhereAsync(
                 x => x.Categories.Any(p => categories.Contains(p.Id)) && x.Status == CampaignStatus.Live);
 
-            return new PaginatedResult<CampaignCreatorResult>(paginatedOptions, count,
-                _mapper.Map<IEnumerable<CampaignCreatorResult>>(result));
+            var campaignIds = result.Select(x => x.Id);
+
+            var campaignPartners = await _campaignPartnerRepository.FindWhereAsync(x =>
+                campaignIds.Contains(x.Campaign.Id) && x.ContentCreator.Id == user.Person.Id, null);
+
+            var res = result.GroupJoin(campaignPartners, x => x.Id, x => x.Campaign.Id, (campaign, partners) => new { campaign, partners})
+                .Select(x =>
+                {
+                    var mapped = _mapper.Map<CampaignCreatorResult>(x.campaign);
+                    if (x.partners.Any())
+                    {
+                        mapped.Partnership = new CreatorPartnerResult()
+                        {
+                            Status = x.partners.First().Status,
+                            AffiliateCode = x.partners.First().AffiliateCode
+                        };
+                    };
+                    return mapped;
+                });
+
+            return new PaginatedResult<CampaignCreatorResult>(paginatedOptions, count, res);
         }
     }
 }

@@ -28,6 +28,11 @@ namespace Captivlink.Application.Campaigns.Mappings
 
             CreateMap<GetAllCampaignQuery, PaginationOptions>();
             CreateMap<GetCampaignFeedQuery, PaginationOptions>();
+            CreateMap<GetCampaignPartnersQuery, PaginationOptions>();
+            CreateMap<GetCreatorCampaignsQuery, PaginationOptions>();
+
+            CreateMap<CampaignPartner, CampaignPartnerResult>()
+                .ForMember(x=>x.ContentCreator, o=>o.MapFrom(m => m.ContentCreator));
         }
 
     }
