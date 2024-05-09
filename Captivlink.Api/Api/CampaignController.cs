@@ -161,7 +161,7 @@ namespace Captivlink.Api.Api
             var command = new ApproveOrRejectPartnerCommand()
             {
                 CampaignPartnerId = partnerId,
-                Outcome = PartnerOutcome.Approve,
+                Outcome = PartnerOutcome.Reject,
                 UserId = User.GetUserGuid()
             };
 
