@@ -46,5 +46,6 @@ namespace Captivlink.Infrastructure.Data
         public DbSet<Website> Websites { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<CampaignPartner> CampaignPartners { get; set; }
+        public DbSet<CampaignEvent> CampaignEvents { get; set; }
     }
 }

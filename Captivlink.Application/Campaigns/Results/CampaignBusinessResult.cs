@@ -25,5 +25,8 @@ namespace Captivlink.Application.Campaigns.Results
         public DateTime EndDateTime { get; set; }
         public WebsiteResult Website { get; set; }
         public CampaignStatus Status { get; set; }
+        public int TotalClicks { get; set; }
+        public int TotalPurchases { get; set; }
+        public decimal TotalPurchaseValue { get; set; }
     }
 }

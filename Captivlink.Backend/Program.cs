@@ -17,6 +17,7 @@ namespace Captivlink.Backend
         {
             public bool EnableSwagger { get; set; }
             public string SwaggerBaseUrl { get; set; }
+            public string EncryptionKey { get; set; }
         }
 
         public static IConfiguration Configuration { get; set; }

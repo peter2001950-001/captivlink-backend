@@ -1,4 +1,4 @@
-﻿using System.Linq.Dynamic.Core;
+﻿using Captivlink.Infrastructure.Cache;
 using Captivlink.Infrastructure.Data;
 using Captivlink.Infrastructure.Domain;
 using Captivlink.Infrastructure.Domain.Enums;
@@ -10,8 +10,10 @@ namespace Captivlink.Infrastructure.Repositories
 {
     public class CampaignPartnerRepository : BaseRepository<CampaignPartner>, ICampaignPartnerRepository
     {
-        public CampaignPartnerRepository(ApplicationDbContext dbContext) : base(dbContext)
+        private readonly ICacheService _cacheService;
+        public CampaignPartnerRepository(ApplicationDbContext dbContext, ICacheService cacheService) : base(dbContext)
         {
+            _cacheService = cacheService;
         }
 
         protected override IQueryable<CampaignPartner> Query => DbContext.CampaignPartners.Include(x => x.Campaign).Include(x => x.ContentCreator).AsQueryable();
@@ -31,6 +33,19 @@ namespace Captivlink.Infrastructure.Repositories
 
             return new PaginatedResult<CampaignPartner>(paginationOptions, totalCount, items);
 
+        }
+
+        public async Task<CampaignPartner?> GetCampaignPartnerByAffCodeAsync(string affiliateCode)
+        {
+            var cachedResult = await _cacheService.GetAsync<CampaignPartner>(affiliateCode);
+            if (cachedResult != null) return cachedResult;
+            
+            var entity = await Query.FirstOrDefaultAsync(x => x.AffiliateCode == affiliateCode);
+            if (entity == null)
+                return null;
+
+            await _cacheService.SetAsync(affiliateCode, entity);
+            return entity;
         }
     }
 }

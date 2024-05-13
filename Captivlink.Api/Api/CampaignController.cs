@@ -10,8 +10,10 @@ using Captivlink.Application.Campaigns.Commands;
 using Captivlink.Api.Utility;
 using Captivlink.Application.Campaigns.Queries;
 using Captivlink.Application.Campaigns.Results;
+using Captivlink.Application.Campaigns.Results.Performance;
 using Captivlink.Infrastructure.Utility;
 using Swashbuckle.AspNetCore.Annotations;
+using Azure.Core;
 
 namespace Captivlink.Api.Api
 {
@@ -173,6 +175,31 @@ namespace Captivlink.Api.Api
             }
 
             return Ok();
+        }
+
+        [HttpGet("{id}/performance")]
+        [SwaggerResponse(200, "Success", typeof(CampaignPerformanceResult))]
+        [SwaggerResponse(400, "Bad request")]
+        [SwaggerResponse(404, "Not found")]
+        public async Task<IActionResult> GetCampaignPerformanceAsync(Guid id, [FromQuery] DateTime startTime,
+            [FromQuery] DateTime endTime)
+        {
+            var query = new GetCampaignPerformanceQuery()
+            {
+                CampaignId = id,
+                EndDate = endTime,
+                StartDate = startTime,
+                UserId = User.GetUserGuid()
+            };
+
+            var result = await _mediatr.Send(query);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
         }
     }
 }

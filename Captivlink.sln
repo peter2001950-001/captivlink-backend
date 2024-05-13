@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Captivlink.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Captivlink.Application", "Captivlink.Application\Captivlink.Application.csproj", "{051C5FC5-3FB3-413B-948B-CF49C7034258}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Captivlink.Worker", "Captivlink.Worker\Captivlink.Worker.csproj", "{922112B3-3AC0-4151-86B9-F463FA1C7BD5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C474E69D-2C5A-491E-867F-3EF157C37738} = {C474E69D-2C5A-491E-867F-3EF157C37738}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +38,10 @@ Global
 		{051C5FC5-3FB3-413B-948B-CF49C7034258}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{051C5FC5-3FB3-413B-948B-CF49C7034258}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{051C5FC5-3FB3-413B-948B-CF49C7034258}.Release|Any CPU.Build.0 = Release|Any CPU
+		{922112B3-3AC0-4151-86B9-F463FA1C7BD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{922112B3-3AC0-4151-86B9-F463FA1C7BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{922112B3-3AC0-4151-86B9-F463FA1C7BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{922112B3-3AC0-4151-86B9-F463FA1C7BD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

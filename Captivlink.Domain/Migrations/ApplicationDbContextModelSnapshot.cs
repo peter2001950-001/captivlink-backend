@@ -241,6 +241,50 @@ namespace Captivlink.Infrastructure.Migrations
                     b.ToTable("Campaigns");
                 });
 
+            modelBuilder.Entity("Captivlink.Infrastructure.Domain.CampaignEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<double?>("Amount")
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid>("CampaignPartnerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ExternalId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("ProcessedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CampaignPartnerId");
+
+                    b.ToTable("CampaignEvents");
+                });
+
             modelBuilder.Entity("Captivlink.Infrastructure.Domain.CampaignPartner", b =>
                 {
                     b.Property<Guid>("Id")
@@ -617,6 +661,17 @@ namespace Captivlink.Infrastructure.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Website");
+                });
+
+            modelBuilder.Entity("Captivlink.Infrastructure.Domain.CampaignEvent", b =>
+                {
+                    b.HasOne("Captivlink.Infrastructure.Domain.CampaignPartner", "CampaignPartner")
+                        .WithMany()
+                        .HasForeignKey("CampaignPartnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CampaignPartner");
                 });
 
             modelBuilder.Entity("Captivlink.Infrastructure.Domain.CampaignPartner", b =>

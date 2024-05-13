@@ -12,5 +12,6 @@ namespace Captivlink.Infrastructure.Repositories.Contracts
     public interface ICampaignPartnerRepository : IBaseRepository<CampaignPartner>
     {
         Task<PaginatedResult<CampaignPartner>> GetPagedCreatorCampaignsAsync(Guid creatorId, PaginationOptions paginationOptions, CampaignPartnerStatus? status);
+        Task<CampaignPartner?> GetCampaignPartnerByAffCodeAsync(string affiliateCode);
     }
 }
