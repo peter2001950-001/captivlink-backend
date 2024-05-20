@@ -47,5 +47,18 @@ namespace Captivlink.Infrastructure.Repositories
             await _cacheService.SetAsync(affiliateCode, entity);
             return entity;
         }
+
+        public async Task<CampaignPartner?> GetCampaignPartnerByIdAsync(Guid campaignCreatorId)
+        {
+            var cachedResult = await _cacheService.GetAsync<CampaignPartner>("campaign_partner_id" + campaignCreatorId);
+            if (cachedResult != null) return cachedResult;
+
+            var entity = await Query.Include(x => x.Campaign.Website).FirstOrDefaultAsync(x => x.Id == campaignCreatorId);
+            if (entity == null)
+                return null;
+
+            await _cacheService.SetAsync("campaign_partner_id" + campaignCreatorId, entity);
+            return entity;
+        }
     }
 }

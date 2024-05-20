@@ -65,6 +65,7 @@ namespace Captivlink.Infrastructure.Events
                 return null;
             }
 
+            step++;
             return Encode(new TrackingIdentifier(previousValue.UserAgentHash, sessionId[0] + "-" + step,
                 previousValue.CampaignCreatorId));
         }

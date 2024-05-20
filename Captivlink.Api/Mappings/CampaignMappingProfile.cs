@@ -13,6 +13,8 @@ namespace Captivlink.Api.Mappings
             CreateMap<PaginationRequest, GetAllCampaignQuery>();
             CreateMap<PaginationRequest, GetCampaignFeedQuery>();
             CreateMap<PaginationRequest, GetCampaignPartnersQuery>();
+            CreateMap<PaginationRequest, GetCampaignPartnersPerformanceQuery>();
+
             CreateMap<CampaignPartnershipRequest, GetCreatorCampaignsQuery>();
 
             CreateMap<CampaignRequest, UpdateCampaignCommand>();

@@ -7,10 +7,11 @@ using Captivlink.Application.Users.Results;
 
 namespace Captivlink.Application.Campaigns.Results.Performance
 {
-    public class CampaignCreatorPerformanceResult
+    public class CampaignPartnerPerformanceResult
     {
         public PersonResult ContentCreator { get; set; }
         public MetricsResult MetricsForPeriod { get; set; }
         public MetricsResult MetricsLifetime { get; set; }
+        public decimal Budget { get; set; }
     }
 }

@@ -10,8 +10,6 @@ namespace Captivlink.Application.Campaigns.Results.Performance
         public ChartResult ClickData { get; set; }
         public ChartResult PurchaseData { get; set; }
         public ChartResult PurchaseValueData { get; set; }
-        public List<CampaignCreatorPerformanceResult> CreatorPerformances { get; set; }
-
       
     }
 

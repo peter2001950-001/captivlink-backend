@@ -1,10 +1,6 @@
 ﻿using System.Diagnostics;
 using Confluent.Kafka;
-using System.Text.RegularExpressions;
-using Captivlink.Infrastructure.Events;
 using Captivlink.Worker.Interfaces;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Captivlink.Worker
 {

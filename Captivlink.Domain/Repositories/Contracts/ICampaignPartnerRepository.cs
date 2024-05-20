@@ -13,5 +13,6 @@ namespace Captivlink.Infrastructure.Repositories.Contracts
     {
         Task<PaginatedResult<CampaignPartner>> GetPagedCreatorCampaignsAsync(Guid creatorId, PaginationOptions paginationOptions, CampaignPartnerStatus? status);
         Task<CampaignPartner?> GetCampaignPartnerByAffCodeAsync(string affiliateCode);
+        Task<CampaignPartner?> GetCampaignPartnerByIdAsync(Guid campaignCreatorId);
     }
 }

@@ -16,6 +16,7 @@ namespace Captivlink.Worker
             builder.Services.AddSingleton<IHostedService, ConsumerService>();
             builder.Services.AddScoped<IEventHandlerProxy, EventHandlerProxy>();
             builder.Services.AddScoped<IEventHandler, ClickEventHandler>();
+            builder.Services.AddScoped<IEventHandler, PurchaseEventHandler>();
 
             var app = builder.Build();
 

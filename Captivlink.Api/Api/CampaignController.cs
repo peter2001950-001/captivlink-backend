@@ -201,5 +201,29 @@ namespace Captivlink.Api.Api
 
             return Ok(result);
         }
+
+        [HttpGet("{id}/partners/performance")]
+        [SwaggerResponse(200, "Success", typeof(PaginatedResult<CampaignPartnerPerformanceResult>))]
+        [SwaggerResponse(400, "Bad request")]
+        [SwaggerResponse(404, "Not found")]
+        public async Task<IActionResult> GetCampaignPartnersPerformanceAsync(Guid id, [FromQuery] DateTime startTime,
+            [FromQuery] DateTime endTime, [FromQuery] PaginationRequest request)
+        {
+            var query = _mapper.Map<GetCampaignPartnersPerformanceQuery>(request);
+            query.CampaignId = id;
+            query.EndDate = endTime;
+            query.StartDate = startTime;
+            query.UserId =  User.GetUserGuid();
+
+
+            var result = await _mediatr.Send(query);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
     }
 }
