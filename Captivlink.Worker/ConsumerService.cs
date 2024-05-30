@@ -4,7 +4,7 @@ using Captivlink.Worker.Interfaces;
 
 namespace Captivlink.Worker
 {
-    public class ConsumerService : IHostedService
+    public class ConsumerService : BackgroundService
     {
         private readonly IConfiguration _configuration;
         private readonly IEventHandlerProxy _eventHandlerProxy;
@@ -13,8 +13,10 @@ namespace Captivlink.Worker
             _configuration = configuration;
             _eventHandlerProxy = serviceProvider.CreateScope().ServiceProvider.GetService<IEventHandlerProxy>()!;
         }
-        public async Task StartAsync(CancellationToken cancellationToken)
+
+        protected override  async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            await Task.Yield();
             var config = new ConsumerConfig
             {
                 GroupId = "worker",
@@ -53,11 +55,6 @@ namespace Captivlink.Worker
             {
                 Debug.WriteLine(ex.Message);
             }
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
         }
     }
 }

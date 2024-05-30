@@ -1,8 +1,7 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Captivlink.Application.Campaigns.Results;
 using Captivlink.Application.Interfaces.ValidatorPipelines.Queries;
-using Captivlink.Infrastructure.Domain;
+using Captivlink.Infrastructure.Cache;
 using Captivlink.Infrastructure.Repositories.Contracts;
 using Captivlink.Infrastructure.Utility;
 
@@ -13,12 +12,14 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
         private readonly ICampaignPartnerRepository _campaignPartnerRepository;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IPerformanceCacheService _performanceCacheService;
 
-        public GetCreatorCampaignsQueryHandler(ICampaignPartnerRepository campaignPartnerRepository, IMapper mapper, IUserRepository userRepository)
+        public GetCreatorCampaignsQueryHandler(ICampaignPartnerRepository campaignPartnerRepository, IMapper mapper, IUserRepository userRepository, IPerformanceCacheService performanceCacheService)
         {
             _campaignPartnerRepository = campaignPartnerRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _performanceCacheService = performanceCacheService;
         }
 
         public async Task<PaginatedResult<CampaignCreatorResult>?> Handle(GetCreatorCampaignsQuery request, CancellationToken cancellationToken)
@@ -34,7 +35,7 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
                 await _campaignPartnerRepository.GetPagedCreatorCampaignsAsync(user.Person.Id, paginatedOptions,
                     request.Status);
 
-            var result = paginatedResult.Data.Select(x =>
+            var result = paginatedResult.Data.Select(async x =>
             {
                 var obj = _mapper.Map<CampaignCreatorResult>(x.Campaign);
                 obj.Partnership = new CreatorPartnerResult()
@@ -42,8 +43,9 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
                     AffiliateCode = x.AffiliateCode,
                     Status = x.Status
                 };
+                obj.AmountEarned = (await _performanceCacheService.GetCreatorCampaignPerformance(x.Id)).TotalEarned;
                 return obj;
-            });
+            }).Select(x => x.Result);
 
             return new PaginatedResult<CampaignCreatorResult>(paginatedOptions, paginatedResult.TotalCount, result);
         }

@@ -2,6 +2,7 @@
 using Captivlink.Infrastructure.Utility;
 using AutoMapper;
 using Captivlink.Application.Campaigns.Results;
+using Captivlink.Infrastructure.Cache;
 using Captivlink.Infrastructure.Repositories.Contracts;
 
 namespace Captivlink.Application.Campaigns.Queries.Handlers
@@ -11,14 +12,14 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
         private readonly ICampaignRepository _campaignRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly ICampaignEventRepository _campaignEventRepository;
+        private readonly IPerformanceCacheService _performanceCacheService;
 
-        public GetAllCampaignQueryHandler(ICampaignRepository campaignRepository, IUserRepository userRepository, IMapper mapper, ICampaignEventRepository campaignEventRepository)
+        public GetAllCampaignQueryHandler(ICampaignRepository campaignRepository, IUserRepository userRepository, IMapper mapper, IPerformanceCacheService performanceCacheService)
         {
             this._campaignRepository = campaignRepository;
             _userRepository = userRepository;
             _mapper = mapper;
-            _campaignEventRepository = campaignEventRepository;
+            _performanceCacheService = performanceCacheService;
         }
 
         public async Task<PaginatedResult<CampaignBusinessResult>?> Handle(GetAllCampaignQuery request, CancellationToken cancellationToken)
@@ -36,7 +37,7 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
             var mappedResult = _mapper.Map<List<CampaignBusinessResult>>(result);
             foreach (var campaignBusinessResult in mappedResult)
             {
-                var performance = await _campaignEventRepository.GetCampaignPerformanceAsync(campaignBusinessResult.Id);
+                var performance = await _performanceCacheService.GetCampaignPerformanceAsync(campaignBusinessResult.Id);
                 campaignBusinessResult.TotalClicks = performance.ClicksCount;
                 campaignBusinessResult.TotalPurchases = performance.PurchasesCount;
                 campaignBusinessResult.TotalPurchaseValue = performance.TotalValue;

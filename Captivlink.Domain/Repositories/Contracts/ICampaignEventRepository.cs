@@ -10,6 +10,5 @@ namespace Captivlink.Infrastructure.Repositories.Contracts
 {
     public interface ICampaignEventRepository : IBaseRepository<CampaignEvent>
     {
-        Task<CampaignPerformance> GetCampaignPerformanceAsync(Guid campaignId);
     }
 }

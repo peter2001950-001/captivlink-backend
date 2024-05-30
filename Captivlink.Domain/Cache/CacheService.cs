@@ -15,7 +15,10 @@ namespace Captivlink.Infrastructure.Cache
 
         public async Task SetAsync<T>(string key, T value) where T : class
         {
-            var json = JsonConvert.SerializeObject(value);
+            var json = JsonConvert.SerializeObject(value, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
             var jsonAsBytes = Encoding.UTF8.GetBytes(json);
             await _cache.SetAsync(key, jsonAsBytes);
         }

@@ -13,6 +13,7 @@ using Captivlink.Api.Utility;
 using MediatR;
 using Azure.Core;
 using Captivlink.Application.Campaigns.Commands;
+using Captivlink.Application.Campaigns.Results.Performance;
 
 namespace Captivlink.Api.Api
 {
@@ -123,6 +124,29 @@ namespace Captivlink.Api.Api
             {
                 CampaignId = id,
                 UserId = User.GetUserGuid()
+            };
+            var result = await _mediator.Send(query);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/performance")]
+        [SwaggerResponse(200, "Success", typeof(CreatorCampaignPerformanceResult))]
+        [SwaggerResponse(400, "Bad request")]
+        [SwaggerResponse(404, "Not found")]
+        public async Task<IActionResult> GetCampaignPerformanceAsync(Guid id, [FromQuery] DateTime startTime, [FromQuery] DateTime endTime)
+        {
+            var query = new GetCreatorCampaignPerformanceQuery()
+            {
+                CampaignId = id,
+                UserId = User.GetUserGuid(),
+                StartDate = startTime,
+                EndDate = endTime
             };
             var result = await _mediator.Send(query);
 

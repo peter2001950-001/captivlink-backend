@@ -19,5 +19,6 @@ namespace Captivlink.Application.Campaigns.Results
         public CompanyResult Company { get; set; }
         public CreatorPartnerResult? Partnership { get; set; }
         public DateTime CreatedOn { get; set; }
+        public decimal AmountEarned { get; set; }
     }
 }

@@ -47,6 +47,11 @@ namespace Captivlink.Application.Campaigns.Commands.Handlers
                 {
                     campaign.BudgetPerCreator = request.BudgetPerCreator;
                 }
+
+                if (campaign.EndDateTime < request.EndDateTime)
+                {
+                    campaign.EndDateTime = request.EndDateTime;
+                }
             }
             else if(campaign.Status == CampaignStatus.Draft)
             {

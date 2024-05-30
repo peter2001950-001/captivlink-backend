@@ -1,4 +1,5 @@
-﻿using Captivlink.Infrastructure.Domain;
+﻿using Captivlink.Infrastructure.Cache;
+using Captivlink.Infrastructure.Domain;
 using Captivlink.Infrastructure.Domain.Enums;
 using Captivlink.Infrastructure.Events;
 using Captivlink.Infrastructure.Repositories.Contracts;
@@ -12,11 +13,13 @@ namespace Captivlink.Worker.EventHandlers
         public string EventType => "ClickEvent";
         private readonly ICampaignEventRepository _campaignEventRepository;
         private readonly ICampaignPartnerRepository _campaignPartnerRepository;
+        private readonly IPerformanceCacheService _performanceCacheService;
 
-        public ClickEventHandler(ICampaignEventRepository campaignEventRepository, ICampaignPartnerRepository campaignPartnerRepository)
+        public ClickEventHandler(ICampaignEventRepository campaignEventRepository, ICampaignPartnerRepository campaignPartnerRepository, IPerformanceCacheService performanceCacheService)
         {
             _campaignEventRepository = campaignEventRepository;
             _campaignPartnerRepository = campaignPartnerRepository;
+            _performanceCacheService = performanceCacheService;
         }
 
         public async Task HandleAsync(string value)
@@ -50,6 +53,7 @@ namespace Captivlink.Worker.EventHandlers
             };
 
             await _campaignEventRepository.AddAsync(campaignEvent);
+            await _performanceCacheService.CampaignEventAdded(campaignPartner.Campaign.Id);
         }
     }
 }

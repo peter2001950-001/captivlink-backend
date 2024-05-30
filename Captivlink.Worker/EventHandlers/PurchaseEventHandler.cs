@@ -1,4 +1,5 @@
-﻿using Captivlink.Infrastructure.Domain;
+﻿using Captivlink.Infrastructure.Cache;
+using Captivlink.Infrastructure.Domain;
 using Captivlink.Infrastructure.Domain.Enums;
 using Captivlink.Infrastructure.Events;
 using Captivlink.Infrastructure.Repositories.Contracts;
@@ -11,10 +12,12 @@ namespace Captivlink.Worker.EventHandlers
     {
         private readonly ICampaignPartnerRepository _campaignPartnerRepository;
         private readonly ICampaignEventRepository _campaignEventRepository;
-        public PurchaseEventHandler(ICampaignPartnerRepository campaignPartnerRepository, ICampaignEventRepository campaignEventRepository)
+        private readonly IPerformanceCacheService _performanceCacheService;
+        public PurchaseEventHandler(ICampaignPartnerRepository campaignPartnerRepository, ICampaignEventRepository campaignEventRepository, IPerformanceCacheService performanceCacheService)
         {
             _campaignPartnerRepository = campaignPartnerRepository;
             _campaignEventRepository = campaignEventRepository;
+            _performanceCacheService = performanceCacheService;
         }
 
         public string EventType => "PurchaseEvent";
@@ -54,6 +57,7 @@ namespace Captivlink.Worker.EventHandlers
             };
 
             await _campaignEventRepository.AddAsync(purchaseEvent);
+            await _performanceCacheService.CampaignEventAdded(purchaseEvent.CampaignPartner.Campaign.Id);
         }
     }
 }

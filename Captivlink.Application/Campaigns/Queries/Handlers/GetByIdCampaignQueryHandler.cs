@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Captivlink.Application.Campaigns.Results;
 using Captivlink.Application.Interfaces.ValidatorPipelines.Queries;
+using Captivlink.Infrastructure.Cache;
 using Captivlink.Infrastructure.Repositories.Contracts;
 
 namespace Captivlink.Application.Campaigns.Queries.Handlers
@@ -11,14 +12,14 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
         private readonly IUserRepository _userRepository;
         private readonly ICampaignRepository _campaignRepository;
         private readonly IMapper _mapper;
-        private readonly ICampaignEventRepository _campaignEventRepository;
+        private readonly IPerformanceCacheService _performanceCacheService;
 
-        public GetByIdCampaignQueryHandler(IUserRepository userRepository, IMapper mapper, ICampaignRepository campaignRepository, ICampaignEventRepository campaignEventRepository)
+        public GetByIdCampaignQueryHandler(IUserRepository userRepository, IMapper mapper, ICampaignRepository campaignRepository, ICampaignEventRepository campaignEventRepository, IPerformanceCacheService performanceCacheService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _campaignRepository = campaignRepository;
-            _campaignEventRepository = campaignEventRepository;
+            _performanceCacheService = performanceCacheService;
         }
 
         public async Task<CampaignBusinessResult?> Handle(GetByIdCampaignQuery request, CancellationToken cancellationToken)
@@ -34,7 +35,7 @@ namespace Captivlink.Application.Campaigns.Queries.Handlers
 
             var mappedResult = _mapper.Map<CampaignBusinessResult>(result);
             
-            var performance = await _campaignEventRepository.GetCampaignPerformanceAsync(result.Id);
+            var performance = await _performanceCacheService.GetCampaignPerformanceAsync(result.Id);
             mappedResult.TotalClicks = performance.ClicksCount;
             mappedResult.TotalPurchases = performance.PurchasesCount;
             mappedResult.TotalPurchaseValue = performance.TotalValue;

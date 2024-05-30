@@ -25,9 +25,12 @@ namespace Captivlink.Infrastructure
             services.AddScoped<IProducerProvider, ProducerProvider>();
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<ICampaignEventRepository, CampaignEventRepository>();
+            services.AddScoped<IPerformanceCacheService, PerformanceCacheService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+            {
+                options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+            });
 
             services.AddStackExchangeRedisCache(options =>
             {
