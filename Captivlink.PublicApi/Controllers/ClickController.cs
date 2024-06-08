@@ -1,9 +1,9 @@
-﻿using Captivlink.Backend.Services.Contract;
+﻿using Captivlink.PublicApi.Services.Contract;
 using Captivlink.Infrastructure.Events;
 using Captivlink.Infrastructure.Events.Providers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Captivlink.Backend.Controllers
+namespace Captivlink.PublicApi.Controllers
 {
     [ApiController]
     public class ClickController : ControllerBase

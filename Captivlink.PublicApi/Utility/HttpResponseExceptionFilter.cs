@@ -1,4 +1,4 @@
-﻿namespace Captivlink.Backend.Utility
+﻿namespace Captivlink.PublicApi.Utility
 {
     public class HttpResponseExceptionFilter
     {

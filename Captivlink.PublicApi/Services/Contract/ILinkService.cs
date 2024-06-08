@@ -1,6 +1,6 @@
 ﻿using Captivlink.Infrastructure.Domain;
 
-namespace Captivlink.Backend.Services.Contract
+namespace Captivlink.PublicApi.Services.Contract
 {
     public interface ILinkService
     {

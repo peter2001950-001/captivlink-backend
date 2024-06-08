@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Captivlink.Backend.Utility
+namespace Captivlink.PublicApi.Utility
 {
     public static class HashOperation
     {

@@ -1,4 +1,4 @@
-namespace Captivlink.Backend
+namespace Captivlink.PublicApi
 {
     public class WeatherForecast
     {

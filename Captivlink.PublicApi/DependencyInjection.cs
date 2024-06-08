@@ -1,7 +1,7 @@
-﻿using Captivlink.Backend.Services;
-using Captivlink.Backend.Services.Contract;
+﻿using Captivlink.PublicApi.Services;
+using Captivlink.PublicApi.Services.Contract;
 
-namespace Captivlink.Backend
+namespace Captivlink.PublicApi
 {
     public static class DependencyInjection
     {

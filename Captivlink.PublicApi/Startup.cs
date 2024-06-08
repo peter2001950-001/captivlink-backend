@@ -1,11 +1,11 @@
-﻿using Captivlink.Backend.Utility.Swagger;
+﻿using Captivlink.PublicApi.Utility.Swagger;
 using System.Text.Json.Serialization;
 using Captivlink.Infrastructure;
 using Microsoft.IdentityModel.Logging;
 using Captivlink.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Captivlink.Backend
+namespace Captivlink.PublicApi
 {
     public class Startup
     {

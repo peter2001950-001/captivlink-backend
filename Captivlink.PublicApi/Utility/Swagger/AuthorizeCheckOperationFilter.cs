@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Captivlink.Backend.Utility.Swagger
+namespace Captivlink.PublicApi.Utility.Swagger
 {
     public class AuthorizeCheckOperationFilter : IOperationFilter
     {

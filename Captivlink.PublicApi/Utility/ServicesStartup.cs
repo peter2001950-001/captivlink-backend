@@ -1,7 +1,7 @@
-﻿using Captivlink.Backend.Utility;
+﻿using Captivlink.PublicApi.Utility;
 
 [assembly: HostingStartup(typeof(ServicesStartup))]
-namespace Captivlink.Backend.Utility
+namespace Captivlink.PublicApi.Utility
 {
 
     public class ServicesStartup : IHostingStartup

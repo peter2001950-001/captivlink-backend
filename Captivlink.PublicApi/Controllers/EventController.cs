@@ -1,5 +1,5 @@
-﻿using Captivlink.Backend.Models;
-using Captivlink.Backend.Utility;
+﻿using Captivlink.PublicApi.Models;
+using Captivlink.PublicApi.Utility;
 using Captivlink.Infrastructure.Domain;
 using Captivlink.Infrastructure.Events;
 using Captivlink.Infrastructure.Events.Providers;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting.Internal;
 using HostingEnvironmentExtensions = Microsoft.AspNetCore.Hosting.HostingEnvironmentExtensions;
 
-namespace Captivlink.Backend.Controllers
+namespace Captivlink.PublicApi.Controllers
 {
     public class PurchaseController : ControllerBase
     {

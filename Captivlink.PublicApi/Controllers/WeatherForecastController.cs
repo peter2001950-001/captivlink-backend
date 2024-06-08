@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Captivlink.Backend.Controllers
+namespace Captivlink.PublicApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -1,4 +1,4 @@
-﻿namespace Captivlink.Backend.Models
+﻿namespace Captivlink.PublicApi.Models
 {
     public class EventRequest
     {

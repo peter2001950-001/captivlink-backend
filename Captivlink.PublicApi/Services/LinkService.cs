@@ -1,8 +1,8 @@
-﻿using Captivlink.Backend.Services.Contract;
+﻿using Captivlink.PublicApi.Services.Contract;
 using Captivlink.Infrastructure.Domain;
 using Captivlink.Infrastructure.Repositories.Contracts;
 
-namespace Captivlink.Backend.Services
+namespace Captivlink.PublicApi.Services
 {
     public class LinkService : ILinkService
     {
