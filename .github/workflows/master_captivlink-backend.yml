@@ -33,13 +33,13 @@ jobs:
       run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
 
     - name: Install dependencies
-      run: dotnet restore Captivlink.API/Captivlink.API.csproj
+      run: dotnet restore Captivlink.Api/Captivlink.Api.csproj
     
     - name: Build
-      run: dotnet build Captivlink.API/Captivlink.API.csproj -c Release -o ./backend/deploy
+      run: dotnet build Captivlink.Api/Captivlink.Api.csproj -c Release -o ./backend/deploy
 
     - name: Publish
-      run: dotnet publish Captivlink.API/Captivlink.API.csproj -c Release -o ./backend/deploy
+      run: dotnet publish Captivlink.Api/Captivlink.Api.csproj -c Release -o ./backend/deploy
 
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v2
