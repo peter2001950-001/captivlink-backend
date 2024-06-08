@@ -51,8 +51,8 @@ jobs:
     - name: Build and push frontend Docker image
       uses: docker/build-push-action@v2
       with:
-        context: ./backend
-        file: ./backend/Captivlink.Api/Dockerfile
+        context: ./
+        file: ./Captivlink.Api/Dockerfile
         push: true
         tags: ${{ env.REGISTRY }}/captivlink/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
 
