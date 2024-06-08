@@ -19,7 +19,10 @@ env:
 jobs:
   build-backend:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: write
+      
     steps:
     - name: Check out repository
       uses: actions/checkout@v2
@@ -54,7 +57,7 @@ jobs:
         context: ./
         file: ./Captivlink.Api/Dockerfile
         push: true
-        tags: ${{ env.REGISTRY }}/captivlink/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
+        tags: ${{ env.REGISTRY }}/peter2001950-001/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
 
   deploy-backend:
     runs-on: ubuntu-latest
@@ -71,4 +74,4 @@ jobs:
         app-name: 'captivlink-backend'
         slot-name: 'Production'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8479942D205E4AD5948A94F89CA7F340 }}
-        images: ${{ env.REGISTRY }}/captivlink/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
+        images: ${{ env.REGISTRY }}/peter2001950-001/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
