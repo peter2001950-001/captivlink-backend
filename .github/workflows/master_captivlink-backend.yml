@@ -9,49 +9,66 @@ on:
       - master
   workflow_dispatch:
 
+env:
+  REGISTRY: ghcr.io
+  FRONTEND_IMAGE_NAME: captivlink-ui
+  BACKEND_IMAGE_NAME: captivlink-backend
+  API_IMAGE_NAME: captivlink-api
+  TAG: ${{ github.sha }}
+  
 jobs:
-  build:
+  build-backend:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - name: Check out repository
+      uses: actions/checkout@v2
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-          include-prerelease: true
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4.0.0
+      with:
+        dotnet-version: 8.0.x
+          
+    - name: Set current date as env variable
+      run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    - name: Install dependencies
+      run: dotnet restore Captivlink.API/Captivlink.API.csproj
     
+    - name: Build
+      run: dotnet build Captivlink.API/Captivlink.API.csproj -c Release -o ./backend/deploy
+
+    - name: Publish
+      run: dotnet publish Captivlink.API/Captivlink.API.csproj -c Release -o ./backend/deploy
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push frontend Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: ./backend
+        file: ./backend/BlueprintBank.API/Dockerfile
+        push: true
+        tags: ${{ env.REGISTRY }}/captivlink/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
+
+  deploy-backend:
+    runs-on: ubuntu-latest
+    needs: [build-backend]
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: .net-app
-      
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'captivlink-backend'
-          slot-name: 'Production'
-          package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8479942D205E4AD5948A94F89CA7F340 }}
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'captivlink-backend'
+        slot-name: 'Production'
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8479942D205E4AD5948A94F89CA7F340 }}
+        images: ${{ env.REGISTRY }}/va-software-solutions/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
