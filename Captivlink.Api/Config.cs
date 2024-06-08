@@ -122,6 +122,13 @@ namespace Captivlink.Api
         {
             switch (environment)
             {
+                case "prod":
+                    return new Dictionary<string, string[]>
+                    {
+                        {"frontend", new[] {"https://captivlink.com"}},
+                        {"backend", new[] {"https://ctiv.me"}},
+                        {"api", new[] {"https://api.captivlink.com"}},
+                    };
                 default:
                     return new Dictionary<string, string[]>
                     {
