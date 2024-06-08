@@ -52,7 +52,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./backend
-        file: ./backend/BlueprintBank.API/Dockerfile
+        file: ./backend/Captivlink.Api/Dockerfile
         push: true
         tags: ${{ env.REGISTRY }}/captivlink/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
 
@@ -71,4 +71,4 @@ jobs:
         app-name: 'captivlink-backend'
         slot-name: 'Production'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8479942D205E4AD5948A94F89CA7F340 }}
-        images: ${{ env.REGISTRY }}/va-software-solutions/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
+        images: ${{ env.REGISTRY }}/captivlink/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
