@@ -31,6 +31,8 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Captivlink.Api.Utility.CategorySeeder;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Http;
 
 namespace Captivlink.Api
 {
@@ -67,7 +69,7 @@ namespace Captivlink.Api
             RegisterIdentityServer(services);
             services.AddApplicationServices();
 
-           
+
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
@@ -139,7 +141,7 @@ namespace Captivlink.Api
                 .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
 
             services.AddTransient<IRedirectUriValidator, LogoutRedirectUriValidator>();
-           
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Default Lockout settings.
@@ -180,7 +182,8 @@ namespace Captivlink.Api
                 opts.JsonSerializerOptions.Converters.Add(enumConverter);
             });
 
-            services.AddSingleton<ICorsPolicyService>((container) => {
+            services.AddSingleton<ICorsPolicyService>((container) =>
+            {
                 var logger = container.GetRequiredService<ILogger<DefaultCorsPolicyService>>();
                 return new DefaultCorsPolicyService(logger)
                 {
@@ -292,7 +295,7 @@ namespace Captivlink.Api
         public void Configure(IApplicationBuilder app)
         {
             Seeder.SeedDatabase(app.ApplicationServices).GetAwaiter().GetResult();
-            
+
             using var scope = app.ApplicationServices.CreateScope();
             var categorySeeder = scope.ServiceProvider.GetRequiredService<ICategorySeeder>();
             categorySeeder.SeedCategories().GetAwaiter().GetResult();
@@ -301,8 +304,15 @@ namespace Captivlink.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseCookiePolicy(new CookiePolicyOptions
+                {
+                    HttpOnly = HttpOnlyPolicy.None,
+                    MinimumSameSitePolicy = SameSiteMode.None,
+                    Secure = CookieSecurePolicy.Always
+                });
             }
-            app.Use(async (context, next) => {
+            app.Use(async (context, next) =>
+            {
                 context.Response.Headers.Add("Content-Security-Policy", "default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src http: https: data:; frame-src 'self'");
 
                 await next();
