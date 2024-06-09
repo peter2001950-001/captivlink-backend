@@ -184,7 +184,7 @@ namespace Captivlink.Api
                 var logger = container.GetRequiredService<ILogger<DefaultCorsPolicyService>>();
                 return new DefaultCorsPolicyService(logger)
                 {
-                    AllowedOrigins = { "http://localhost:4200"}
+                    AllowedOrigins = { Program.Application.FrontendUrl }
                 };
             });
         }
