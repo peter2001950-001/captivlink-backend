@@ -90,6 +90,7 @@ namespace Captivlink.Api.Utility
             {
                 context.Clients.Add(client.ToEntity());
             }
+            
 
             context.SaveChanges();
 

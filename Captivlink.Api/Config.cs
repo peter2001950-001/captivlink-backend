@@ -125,7 +125,7 @@ namespace Captivlink.Api
                 case "prod":
                     return new Dictionary<string, string[]>
                     {
-                        {"frontend", new[] {"https://captivlink.com"}},
+                        {"frontend", new[] {"https://captivlink.com", "https://green-desert-0d4411c0f.5.azurestaticapps.net"}},
                         {"backend", new[] {"https://ctiv.me"}},
                         {"api", new[] {"https://api.captivlink.com"}},
                     };
