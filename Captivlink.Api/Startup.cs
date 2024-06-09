@@ -312,6 +312,7 @@ namespace Captivlink.Api
             });
             app.Use(async (context, next) =>
             {
+                context.SetIdentityServerOrigin(Program.Application.Authority.BaseUrl);
                 context.Response.Headers.Add("Content-Security-Policy", "default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src http: https: data:; frame-src 'self'");
 
                 await next();
