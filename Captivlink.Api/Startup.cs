@@ -304,13 +304,12 @@ namespace Captivlink.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseCookiePolicy(new CookiePolicyOptions
-                {
-                    HttpOnly = HttpOnlyPolicy.None,
-                    MinimumSameSitePolicy = SameSiteMode.None,
-                    Secure = CookieSecurePolicy.Always
-                });
+               
             }
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax
+            });
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Add("Content-Security-Policy", "default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src http: https: data:; frame-src 'self'");
