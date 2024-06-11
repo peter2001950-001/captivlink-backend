@@ -101,9 +101,9 @@ namespace Captivlink.Api
                     AllowedGrantTypes = new[] {GrantType.AuthorizationCode},
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = false,
-                    AccessTokenLifetime = (int) Math.Floor(TimeSpan.FromMinutes(5).TotalSeconds),
-                    SlidingRefreshTokenLifetime = (int) Math.Floor(TimeSpan.FromMinutes(15).TotalSeconds),
-                    AbsoluteRefreshTokenLifetime = (int) Math.Floor(TimeSpan.FromMinutes(30).TotalSeconds),
+                    AccessTokenLifetime = (int) Math.Floor(TimeSpan.FromMinutes(15).TotalSeconds),
+                    SlidingRefreshTokenLifetime = (int) Math.Floor(TimeSpan.FromMinutes(30).TotalSeconds),
+                    AbsoluteRefreshTokenLifetime = (int) Math.Floor(TimeSpan.FromMinutes(60).TotalSeconds),
                     RedirectUris = uiBaseUrls.SelectMany(x => new[]
                     {
                         $"{x}/signin-callback",

@@ -119,7 +119,7 @@ namespace Captivlink.Api
                 options.Events.RaiseSuccessEvents = true;
 
                 options.Authentication.CookieSlidingExpiration = true;
-                options.Authentication.CookieLifetime = TimeSpan.FromMinutes(1);
+                options.Authentication.CookieLifetime = TimeSpan.FromMinutes(Program.Application.Switches.CookieTimespan);
             })
                 .AddDeveloperSigningCredential()
                 .AddConfigurationStore<AzureConfigurationDbContext>(options =>

@@ -31,6 +31,7 @@ namespace Captivlink.Api
                 public bool UseAccessToken { get; set; }
                 public bool SeedData { get; set; }
                 public bool EnableSwagger { get; set; }
+                public int CookieTimespan { get; set; }
             }
             public class AuthorityConfig
             {
