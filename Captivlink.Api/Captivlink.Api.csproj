@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>8751504f-ae63-4fc3-bac1-71d061568f07</UserSecretsId>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
