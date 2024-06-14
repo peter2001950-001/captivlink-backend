@@ -10,10 +10,7 @@ namespace Captivlink.Infrastructure.Events.Providers
 
         public ProducerProvider(IConfiguration configuration)
         {
-            var producerconfig = new ProducerConfig
-            {
-                BootstrapServers = configuration.GetConnectionString("Kafka")
-            };
+            var producerconfig = new ProducerConfig(DependencyInjection.KafkaClientConfig);
 
             _producer = new ProducerBuilder<string, string>(producerconfig).Build();
         }

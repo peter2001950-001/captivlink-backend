@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Captivlink.Infrastructure;
 using Confluent.Kafka;
 using Captivlink.Worker.Interfaces;
 
@@ -17,10 +18,9 @@ namespace Captivlink.Worker
         protected override  async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await Task.Yield();
-            var config = new ConsumerConfig
+            var config = new ConsumerConfig(DependencyInjection.KafkaClientConfig)
             {
                 GroupId = "worker",
-                BootstrapServers = _configuration.GetConnectionString("Kafka"),
                 AutoOffsetReset = AutoOffsetReset.Earliest,
                 EnableAutoCommit = true,
                 EnableAutoOffsetStore = false
