@@ -28,6 +28,7 @@ using Captivlink.Api.Utility;
 using Captivlink.Api.Utility.Swagger;
 using Captivlink.Application;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using Captivlink.Api.Utility.CategorySeeder;
 using Microsoft.Extensions.Logging;
@@ -55,8 +56,11 @@ namespace Captivlink.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-
+            #if DEBUG
+                services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            #else
+                services.AddControllersWithViews();
+            #endif
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 

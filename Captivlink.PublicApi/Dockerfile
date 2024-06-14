@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Captivlink.Backend/Captivlink.Backend.csproj", "Captivlink.Backend/"]
-RUN dotnet restore "Captivlink.Backend/Captivlink.Backend.csproj"
+COPY ["Captivlink.PublicApi/Captivlink.PublicApi.csproj", "Captivlink.PublicApi/"]
+RUN dotnet restore "Captivlink.PublicApi/Captivlink.PublicApi.csproj"
 COPY . .
-WORKDIR "/src/Captivlink.Backend"
-RUN dotnet build "Captivlink.Backend.csproj" -c Release -o /app/build
+WORKDIR "/src/Captivlink.PublicApi"
+RUN dotnet build "Captivlink.PublicApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Captivlink.Backend.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Captivlink.PublicApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Captivlink.Backend.dll"]
+ENTRYPOINT ["dotnet", "Captivlink.PublicApi.dll"]
