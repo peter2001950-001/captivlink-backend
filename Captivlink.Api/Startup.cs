@@ -56,11 +56,7 @@ namespace Captivlink.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            #if DEBUG
-                services.AddControllersWithViews().AddRazorRuntimeCompilation();
-            #else
-                services.AddControllersWithViews();
-            #endif
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
