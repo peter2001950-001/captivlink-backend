@@ -87,7 +87,7 @@ jobs:
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'captivlink-backend'
+        app-name: 'captivlink-backend-api'
         slot-name: 'Production'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_364BE98F82E046DE935E9039866B6F5B }}
         images: ${{ env.REGISTRY }}/peter2001950-001/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
