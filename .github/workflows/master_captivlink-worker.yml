@@ -75,4 +75,4 @@ jobs:
         app-name: 'captivlink-worker'
         slot-name: 'Production'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D10D11AFEDC04F4DB409919EF9F06C39 }}
-        images: ${{ env.REGISTRY }}/peter2001950-001/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}# More GitHub Actions for Azure: https://github.com/Azure/actions
+        images: ${{ env.REGISTRY }}/peter2001950-001/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
