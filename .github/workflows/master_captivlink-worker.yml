@@ -1,7 +1,10 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - captivlink-worker
+name: Build and deploy - captivlink-worker
 
 on:
   push:
@@ -9,49 +12,67 @@ on:
       - master
   workflow_dispatch:
 
+env:
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE_NAME: captivlink-worker
+  TAG: ${{ github.sha }}
+  
 jobs:
-  build:
+  build-backend:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: write
+      
     steps:
-      - uses: actions/checkout@v4
+    - name: Check out repository
+      uses: actions/checkout@v2
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-          include-prerelease: true
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4.0.0
+      with:
+        dotnet-version: 8.0.x
+          
+    - name: Set current date as env variable
+      run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+    - name: Install dependencies
+      run: dotnet restore Captivlink.Worker/Captivlink.Worker.csproj
+    
+    - name: Build
+      run: dotnet build Captivlink.Worker/Captivlink.Worker.csproj -c Release -o ./backend/deploy
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+    - name: Publish
+      run: dotnet publish Captivlink.Worker/Captivlink.Worker.csproj -c Release -o ./backend/deploy
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-  deploy:
+    - name: Build and push backend Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./
+        file: ./Captivlink.PublicApi/Dockerfile
+        push: true
+        tags: ${{ env.REGISTRY }}/peter2001950-001/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
+
+  deploy-backend:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build-backend]
     environment:
-      name: 'Production'
+      name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: .net-app
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'captivlink-worker'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D10D11AFEDC04F4DB409919EF9F06C39 }}
-          package: .
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'captivlink-worker'
+        slot-name: 'Production'
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D10D11AFEDC04F4DB409919EF9F06C39 }}
+        images: ${{ env.REGISTRY }}/peter2001950-001/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}# More GitHub Actions for Azure: https://github.com/Azure/actions
