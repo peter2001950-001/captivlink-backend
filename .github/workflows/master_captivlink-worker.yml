@@ -56,7 +56,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: ./
-        file: ./Captivlink.PublicApi/Dockerfile
+        file: ./Captivlink.Worker/Dockerfile
         push: true
         tags: ${{ env.REGISTRY }}/peter2001950-001/${{ env.BACKEND_IMAGE_NAME }}:${{ env.TAG }}
 
