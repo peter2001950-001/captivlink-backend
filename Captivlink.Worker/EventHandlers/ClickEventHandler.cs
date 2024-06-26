@@ -14,6 +14,7 @@ namespace Captivlink.Worker.EventHandlers
         private readonly ICampaignEventRepository _campaignEventRepository;
         private readonly ICampaignPartnerRepository _campaignPartnerRepository;
         private readonly IPerformanceCacheService _performanceCacheService;
+        private static readonly LockProvider<string> LockProvider = new LockProvider<string>();
 
         public ClickEventHandler(ICampaignEventRepository campaignEventRepository, ICampaignPartnerRepository campaignPartnerRepository, IPerformanceCacheService performanceCacheService)
         {
@@ -28,32 +29,42 @@ namespace Captivlink.Worker.EventHandlers
             if (obj == null)
                 return;
 
-            var campaignPartner = await _campaignPartnerRepository.GetFirstOrDefaultAsync(x=>x.AffiliateCode == obj.AffCode);
-            if(campaignPartner == null) return;
+            Console.WriteLine("Click handle: " + obj.AffCode);
+            await LockProvider.WaitAsync(obj.AffCode);
 
-            if(campaignPartner.Campaign.EndDateTime < obj.CreatedOn)
-                return;
-
-            var trackingIdentifier = TrackingIdentifier.Parse(obj.SessionId);
-            if(trackingIdentifier == null) return;
-
-            if(trackingIdentifier.CampaignCreatorId != campaignPartner.Id) return;
-
-            if(await _campaignEventRepository.GetFirstOrDefaultAsync(x => x.SessionId == trackingIdentifier.SessionId) != null)
-                return;
-
-            var campaignEvent = new CampaignEvent()
+            try
             {
-                CreatedOn = obj.CreatedOn,
-                Type = CampaignEventType.Click,
-                CampaignPartner = campaignPartner,
-                SessionId = trackingIdentifier.SessionId,
-                IpAddress = obj.IpAddress,
-                ProcessedOn = DateTime.UtcNow
-            };
+                var campaignPartner = await _campaignPartnerRepository.GetFirstOrDefaultAsync(x => x.AffiliateCode == obj.AffCode);
+                if (campaignPartner == null) return;
 
-            await _campaignEventRepository.AddAsync(campaignEvent);
-            await _performanceCacheService.CampaignEventAdded(campaignPartner.Campaign.Id);
+                if (campaignPartner.Campaign.EndDateTime < obj.CreatedOn)
+                    return;
+
+                var trackingIdentifier = TrackingIdentifier.Parse(obj.SessionId);
+                if (trackingIdentifier == null) return;
+
+                if (trackingIdentifier.CampaignCreatorId != campaignPartner.Id) return;
+
+                if (await _campaignEventRepository.GetFirstOrDefaultAsync(x => x.SessionId == trackingIdentifier.SessionId) != null)
+                    return;
+
+                var campaignEvent = new CampaignEvent()
+                {
+                    CreatedOn = obj.CreatedOn,
+                    Type = CampaignEventType.Click,
+                    CampaignPartner = campaignPartner,
+                    SessionId = trackingIdentifier.SessionId,
+                    IpAddress = obj.IpAddress,
+                    ProcessedOn = DateTime.UtcNow
+                };
+
+                await _campaignEventRepository.AddAsync(campaignEvent);
+                await _performanceCacheService.CampaignEventAdded(campaignPartner.Campaign.Id);
+            }
+            finally
+            {
+                LockProvider.Release(obj.AffCode);
+            }
         }
     }
 }

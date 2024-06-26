@@ -54,7 +54,7 @@ namespace Captivlink.PublicApi.Controllers
                 };
 
                 await _producerProvider.ProduceAsync(clickEvent);
-               
+                Console.WriteLine("New click event is created; SessionId = " + cookieValue);
             }
             return Redirect(link.Campaign.Link);
 

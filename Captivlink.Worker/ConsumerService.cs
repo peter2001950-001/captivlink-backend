@@ -43,7 +43,7 @@ namespace Captivlink.Worker
 
                         consumerBuilder.StoreOffset(consumer);
 
-                        Debug.WriteLine($"Processing complete of request {consumer.Message.Key}");
+                        Console.WriteLine($"Processing complete of request {consumer.Message.Key}");
                     }
                 }
                 catch (OperationCanceledException)
@@ -53,7 +53,7 @@ namespace Captivlink.Worker
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message);
             }
         }
     }
