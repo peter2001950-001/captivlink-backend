@@ -64,6 +64,11 @@ namespace Captivlink.PublicApi
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            if (Configuration.GetSection("Environment").Value == "prod")
+            {
+                app.UseHttpsRedirection();
+            }
+
             app.UseCors(
                 options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
             );
