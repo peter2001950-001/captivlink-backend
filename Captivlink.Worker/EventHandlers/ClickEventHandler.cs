@@ -48,6 +48,11 @@ namespace Captivlink.Worker.EventHandlers
                 if (await _campaignEventRepository.GetFirstOrDefaultAsync(x => x.SessionId == trackingIdentifier.SessionId) != null)
                     return;
 
+                if (await _campaignEventRepository.GetFirstOrDefaultAsync(x =>
+                        x.CampaignPartner.Id == campaignPartner.Id && x.IpAddress == obj.IpAddress &&
+                        Math.Abs((obj.CreatedOn - x.CreatedOn).TotalMinutes) < 1) != null)
+                    return;
+
                 var campaignEvent = new CampaignEvent()
                 {
                     CreatedOn = obj.CreatedOn,
