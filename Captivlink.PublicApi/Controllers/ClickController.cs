@@ -42,7 +42,7 @@ namespace Captivlink.PublicApi.Controllers
                 cookieValue = TrackingIdentifier.Create(userAgent, link.Id);
                 if (cookieValue == null) return Redirect(_configuration.GetValue<string>("MainAppUrl"));
 
-                Response.Cookies.Append("_ctv", cookieValue, new CookieOptions(){SameSite = SameSiteMode.Strict, Secure = true, Expires = DateTimeOffset.Now.AddDays(30), HttpOnly = true});
+                Response.Cookies.Append("_ctv", cookieValue, new CookieOptions(){SameSite = SameSiteMode.None, Secure = false, Expires = DateTimeOffset.Now.AddDays(30), HttpOnly = true});
 
                 var clickEvent = new ClickEvent()
                 {
