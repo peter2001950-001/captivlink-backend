@@ -29,7 +29,7 @@ namespace Captivlink.PublicApi.Controllers
             var ipAddress = Request.HttpContext.Connection.RemoteIpAddress;
             if (Request.Headers.TryGetValue("Origin", out var originHeader))
             {
-                return Unauthorized();
+                return Unauthorized(new {error = "origin is missing"});
             }
 
             if (Request.Cookies.TryGetValue("_ctv", out string? cookieValue) && cookieValue != null)
@@ -42,12 +42,12 @@ namespace Captivlink.PublicApi.Controllers
 
                 if (accessToken != partnership.Campaign.Website.AccessToken)
                 {
-                    return Unauthorized();
+                    return Unauthorized(new {error = "access token is invalid"});
                 }
 
                 if (!IsValidHost(partnership.Campaign.Website, originHeader[0]?.ToString()))
                 {
-                    return Unauthorized();
+                    return Unauthorized(new {error = originHeader[0] + " is not valid for website " + partnership.Campaign.Website.Domain});
                 }
 
 
