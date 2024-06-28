@@ -27,7 +27,10 @@ namespace Captivlink.PublicApi.Controllers
         {
             var userAgent = Request.Headers.UserAgent.ToString();
             var ipAddress = Request.HttpContext.Connection.RemoteIpAddress;
-            string host = Request.HttpContext.Request.Host.Host;
+            if (Request.Headers.TryGetValue("Origin", out var originHeader))
+            {
+                return Unauthorized();
+            }
 
             if (Request.Cookies.TryGetValue("_ctv", out string? cookieValue) && cookieValue != null)
             {
@@ -42,7 +45,7 @@ namespace Captivlink.PublicApi.Controllers
                     return Unauthorized();
                 }
 
-                if (!IsValidHost(partnership.Campaign.Website, host))
+                if (!IsValidHost(partnership.Campaign.Website, originHeader[0]?.ToString()))
                 {
                     return Unauthorized();
                 }
@@ -68,39 +71,35 @@ namespace Captivlink.PublicApi.Controllers
 
         }
 
-        private bool IsValidHost(Website website, string host)
+        private bool IsValidHost(Website website, string? host)
         {
             Console.WriteLine(host);
+
             if (_webHostEnvironment.IsDevelopment())
             {
                 return true;
             }
 
+            if (host == null) return false;
+
             var urlSplitted = host.Split(".");
-            if (urlSplitted.Length == 1)
+            if (website.AllowSubdomains && urlSplitted.Length>=2)
             {
-                return website.Domain == host;
+                return website.Domain.Contains(urlSplitted[^2] + urlSplitted[^1]);
             }
 
-            if (urlSplitted.Length > 1)
+            if (!website.AllowSubdomains && urlSplitted.Length == 2)
             {
-                var index = 0;
-                if (urlSplitted[0] == "www")
-                    index = 1;
+                return website.Domain.Contains(urlSplitted[^2] + urlSplitted[^1]);
+            }
 
-                if (urlSplitted.Length == index + 3)
+            if (!website.AllowSubdomains && urlSplitted.Length == 3)
+            {
+                if (!urlSplitted[0].Contains("www"))
                 {
-                    if (!website.AllowSubdomains)
-                        return false;
-
-                    if (urlSplitted[index + 1] + "." + urlSplitted[index + 2] == website.Name)
-                        return true;
+                    return false;
                 }
-                else if (urlSplitted.Length == index + 2)
-                {
-                    if (urlSplitted[index] + "." + urlSplitted[index + 1] == website.Name)
-                        return true;
-                }
+                return website.Domain.Contains(urlSplitted[^2] + urlSplitted[^1]);
             }
 
             return false;
