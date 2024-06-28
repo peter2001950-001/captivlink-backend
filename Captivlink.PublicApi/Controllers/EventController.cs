@@ -27,7 +27,7 @@ namespace Captivlink.PublicApi.Controllers
         {
             var userAgent = Request.Headers.UserAgent.ToString();
             var ipAddress = Request.HttpContext.Connection.RemoteIpAddress;
-            if (Request.Headers.TryGetValue("Origin", out var originHeader))
+            if (!Request.Headers.TryGetValue("Origin", out var originHeader))
             {
                 return Unauthorized(new {error = "origin is missing"});
             }
