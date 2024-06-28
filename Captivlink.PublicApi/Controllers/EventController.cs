@@ -85,12 +85,12 @@ namespace Captivlink.PublicApi.Controllers
             var urlSplitted = host.Split(".");
             if (website.AllowSubdomains && urlSplitted.Length>=2)
             {
-                return website.Domain.Contains(urlSplitted[^2] + urlSplitted[^1]);
+                return website.Domain.Contains(urlSplitted[^2] + "." + urlSplitted[^1]);
             }
 
             if (!website.AllowSubdomains && urlSplitted.Length == 2)
             {
-                return website.Domain.Contains(urlSplitted[^2] + urlSplitted[^1]);
+                return website.Domain.Contains(urlSplitted[^2] + "." + urlSplitted[^1]);
             }
 
             if (!website.AllowSubdomains && urlSplitted.Length == 3)
@@ -99,7 +99,7 @@ namespace Captivlink.PublicApi.Controllers
                 {
                     return false;
                 }
-                return website.Domain.Contains(urlSplitted[^2] + urlSplitted[^1]);
+                return website.Domain.Contains(urlSplitted[^2] + "." + urlSplitted[^1]);
             }
 
             return false;
