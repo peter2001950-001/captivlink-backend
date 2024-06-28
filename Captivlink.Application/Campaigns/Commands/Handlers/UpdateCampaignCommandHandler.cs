@@ -13,13 +13,15 @@ namespace Captivlink.Application.Campaigns.Commands.Handlers
         private readonly IWebsiteRepository _websiteRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICampaignPartnerRepository _campaignPartnerRepository;
 
-        public UpdateCampaignCommandHandler(ICampaignRepository campaignRepository, IWebsiteRepository websiteRepository, IUserRepository userRepository, ICategoryRepository categoryRepository)
+        public UpdateCampaignCommandHandler(ICampaignRepository campaignRepository, IWebsiteRepository websiteRepository, IUserRepository userRepository, ICategoryRepository categoryRepository, ICampaignPartnerRepository campaignPartnerRepository)
         {
             _campaignRepository = campaignRepository;
             _websiteRepository = websiteRepository;
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
+            _campaignPartnerRepository = campaignPartnerRepository;
         }
 
         public async Task<ValueResult<bool>> Handle(UpdateCampaignCommand request, CancellationToken cancellationToken)
@@ -67,6 +69,7 @@ namespace Captivlink.Application.Campaigns.Commands.Handlers
             }
 
             await _campaignRepository.UpdateAsync(campaign);
+            await _campaignPartnerRepository.ClearCampaignPartnerCache(campaign.Id);
             return new();
         }
 

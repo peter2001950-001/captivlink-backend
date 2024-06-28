@@ -60,5 +60,14 @@ namespace Captivlink.Infrastructure.Repositories
             await _cacheService.SetAsync("campaign_partner_id" + campaignCreatorId, entity);
             return entity;
         }
+
+        public async Task ClearCampaignPartnerCache(Guid campaignId)
+        {
+            var partners = await Query.Where(x => x.Campaign.Id == campaignId).ToListAsync();
+            foreach (var partner in partners)
+            {
+               await _cacheService.DeleteAsync("campaign_partner_id" + partner.Id);
+            }
+        }
     }
 }
