@@ -70,6 +70,7 @@ namespace Captivlink.PublicApi.Controllers
 
         private bool IsValidHost(Website website, string host)
         {
+            Console.WriteLine(host);
             if (_webHostEnvironment.IsDevelopment())
             {
                 return true;
@@ -110,7 +111,7 @@ namespace Captivlink.PublicApi.Controllers
             var next = TrackingIdentifier.Next(trackingIdentifier);
             if (next != null)
             {
-                Response.Cookies.Append("_ctv", next, new CookieOptions() { SameSite = SameSiteMode.Strict, Secure = true, Expires = DateTimeOffset.Now.AddDays(30), HttpOnly = true });
+                Response.Cookies.Append("_ctv", next, new CookieOptions() { SameSite = SameSiteMode.None, Secure = true, Expires = DateTimeOffset.Now.AddDays(30), HttpOnly = true });
             }
         }
     }
