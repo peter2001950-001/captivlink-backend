@@ -68,10 +68,12 @@ namespace Captivlink.PublicApi
             {
                 app.UseHttpsRedirection();
             }
-
-            app.UseCors(
-                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
-            );
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials());
 
             app.UseEndpoints(endpoints =>
             {
